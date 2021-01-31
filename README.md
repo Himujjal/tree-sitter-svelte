@@ -12,40 +12,36 @@ pnpm i tree-sitter-svelte tree-sitter
 
 ```javascript
 const Parser = require("tree-sitter");
-const Vue = require("tree-sitter-vue");
+const Svelte = require("tree-sitter-svelte");
 
 const parser = new Parser();
-parser.setLanguage(Vue);
+parser.setLanguage(Svelte);
 
 const sourceCode = `
-<template>
-  Hello, <a bind:variable="url">{name}</a>
-</template>
+<script context="module">
+    let name = 'world';
+</script>
+<h1>Hello {name'<>{}``"\\''""``{}}!</h1>
 `;
 
 const tree = parser.parse(sourceCode);
 console.log(tree.rootNode.toString());
-// (component
-//   (template_element
-//     (start_tag
-//       (tag_name))
-//       (text)
-//       (element
-//         (start_tag
-//           (tag_name)
-//           (directive_attribute
-//             (directive_name)
-//             (directive_dynamic_argument
-//               (directive_dynamic_argument_value))
-//             (quoted_attribute_value
-//               (attribute_value))))
-//         (interpolation
-//           (raw_text))
-//         (end_tag
-//           (tag_name)))
-//       (text)
-//     (end_tag
-//       (tag_name))))
+
+// (document
+//    (script_element
+//        (start_tag (tag_name)
+//            (attribute (attribute_name) (quoted_attribute_value (attribute_value))))
+//        (raw_text)
+//        (end_tag (tag_name))
+//    )
+//    (element
+//        (start_tag (tag_name))
+//        (text) (raw_text_expr) (text)
+//        (end_tag (tag_name)
+//    )
+//  )
+//)
+
 ```
 
 # LICENSE
