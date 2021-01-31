@@ -7,7 +7,8 @@
     "test": "tree-sitter test",
     "gen": "tree-sitter generate",
     "gentsdef": "node ./script/generateTSDefinition.js",
-    "start": "nodemon"
+    "start": "nodemon",
+    "publish": "np --no-tests --no-2fa --no-yarn"
   },
   "repository": {
     "type": "git",
