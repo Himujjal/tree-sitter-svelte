@@ -1,0 +1,469 @@
+[
+  {
+    "type": "attribute",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "attribute_name",
+          "named": true
+        },
+        {
+          "type": "attribute_value",
+          "named": true
+        },
+        {
+          "type": "expr_attribute_value",
+          "named": true
+        },
+        {
+          "type": "quoted_attribute_value",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "attribute_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "raw_text_expr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "attribute_value",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "document",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "element",
+          "named": true
+        },
+        {
+          "type": "raw_text_expr",
+          "named": true
+        },
+        {
+          "type": "script_element",
+          "named": true
+        },
+        {
+          "type": "special_block_end",
+          "named": true
+        },
+        {
+          "type": "special_block_intermediate",
+          "named": true
+        },
+        {
+          "type": "special_block_start",
+          "named": true
+        },
+        {
+          "type": "style_element",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "element",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "element",
+          "named": true
+        },
+        {
+          "type": "end_tag",
+          "named": true
+        },
+        {
+          "type": "raw_text_expr",
+          "named": true
+        },
+        {
+          "type": "script_element",
+          "named": true
+        },
+        {
+          "type": "self_closing_tag",
+          "named": true
+        },
+        {
+          "type": "special_block_end",
+          "named": true
+        },
+        {
+          "type": "special_block_intermediate",
+          "named": true
+        },
+        {
+          "type": "special_block_start",
+          "named": true
+        },
+        {
+          "type": "start_tag",
+          "named": true
+        },
+        {
+          "type": "style_element",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "end_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "tag_name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "expr_attribute_value",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "raw_text_expr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "quoted_attribute_value",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "attribute_value",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "script_element",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "end_tag",
+          "named": true
+        },
+        {
+          "type": "raw_text",
+          "named": true
+        },
+        {
+          "type": "start_tag",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "self_closing_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "attribute",
+          "named": true
+        },
+        {
+          "type": "tag_name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "special_block_end",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "await_tag",
+          "named": true
+        },
+        {
+          "type": "each_tag",
+          "named": true
+        },
+        {
+          "type": "if_tag",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "special_block_intermediate",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "catch",
+          "named": true
+        },
+        {
+          "type": "else_tag",
+          "named": true
+        },
+        {
+          "type": "elseif_tag",
+          "named": true
+        },
+        {
+          "type": "raw_text_expr",
+          "named": true
+        },
+        {
+          "type": "then_tag",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "special_block_start",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "await_tag",
+          "named": true
+        },
+        {
+          "type": "each_tag",
+          "named": true
+        },
+        {
+          "type": "if_tag",
+          "named": true
+        },
+        {
+          "type": "raw_text_expr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "start_tag",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "attribute",
+          "named": true
+        },
+        {
+          "type": "tag_name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "style_element",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "end_tag",
+          "named": true
+        },
+        {
+          "type": "raw_text",
+          "named": true
+        },
+        {
+          "type": "start_tag",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "\"",
+    "named": false
+  },
+  {
+    "type": "'",
+    "named": false
+  },
+  {
+    "type": "/>",
+    "named": false
+  },
+  {
+    "type": "<",
+    "named": false
+  },
+  {
+    "type": "</",
+    "named": false
+  },
+  {
+    "type": "=",
+    "named": false
+  },
+  {
+    "type": ">",
+    "named": false
+  },
+  {
+    "type": "await_tag",
+    "named": true
+  },
+  {
+    "type": "catch",
+    "named": true
+  },
+  {
+    "type": "comment",
+    "named": true
+  },
+  {
+    "type": "each_tag",
+    "named": true
+  },
+  {
+    "type": "else_tag",
+    "named": true
+  },
+  {
+    "type": "elseif_tag",
+    "named": true
+  },
+  {
+    "type": "errorneous_end_tag_name",
+    "named": true
+  },
+  {
+    "type": "if_tag",
+    "named": true
+  },
+  {
+    "type": "raw_text",
+    "named": true
+  },
+  {
+    "type": "raw_text_expr",
+    "named": true
+  },
+  {
+    "type": "tag_name",
+    "named": true
+  },
+  {
+    "type": "text",
+    "named": true
+  },
+  {
+    "type": "then_tag",
+    "named": true
+  },
+  {
+    "type": "{",
+    "named": false
+  },
+  {
+    "type": "{#",
+    "named": false
+  },
+  {
+    "type": "{/",
+    "named": false
+  },
+  {
+    "type": "{:",
+    "named": false
+  },
+  {
+    "type": "{}",
+    "named": false
+  },
+  {
+    "type": "}",
+    "named": false
+  }
+]

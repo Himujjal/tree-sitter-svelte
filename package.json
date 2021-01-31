@@ -1,0 +1,35 @@
+{
+  "name": "tree-sitter-svelte",
+  "version": "0.0.1",
+  "description": "Tree-sitter-grammar for svelte",
+  "main": "index.js",
+  "scripts": {
+    "test": "tree-sitter test",
+    "gen": "tree-sitter generate",
+    "gentsdef": "node ./script/generateTSDefinition.js",
+    "start": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Himujjal/tree-sitter-svelte.git"
+  },
+  "keywords": [
+    "tree-sitter",
+    "svelte",
+    "grammar"
+  ],
+  "author": "Himujjal <himu@tuta.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Himujjal/tree-sitter-svelte/issues"
+  },
+  "homepage": "https://github.com/Himujjal/tree-sitter-svelte#readme",
+  "dependencies": {
+    "nan": "^2.14.2"
+  },
+  "devDependencies": {
+    "@asgerf/dts-tree-sitter": "^0.1.0",
+    "@types/node": "^14.14.22",
+    "tree-sitter-cli": "^0.18.0"
+  }
+}
