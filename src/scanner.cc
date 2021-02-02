@@ -23,7 +23,8 @@ enum TokenType {
   IMPLICIT_END_TAG,
   RAW_TEXT,
   RAW_TEXT_EXPR,
-  COMMENT
+  COMMENT,
+  HTML
 };
 
 struct Scanner {
@@ -128,42 +129,72 @@ struct Scanner {
     return false;
   }
 
+  /**
+   * @returns -1 for no '@', 1 for success, 0 for 'failure
+   * */
+  int scan_html(TSLexer *lexer) {
+    if (lexer->lookahead != '@')
+      return 0;
+    lexer->advance(lexer, false);
+    if (lexer->lookahead == 'h') {
+      lexer->advance(lexer, false);
+      if (lexer->lookahead == 't') {
+        lexer->advance(lexer, false);
+        if (lexer->lookahead == 'm') {
+          lexer->advance(lexer, false);
+          if (lexer->lookahead == 'l') {
+            lexer->advance(lexer, false);
+            if (iswspace(lexer->lookahead)) {
+              return 1;
+            }
+            return -1;
+          }
+        }
+      }
+    }
+    return -1;
+  }
+
   bool scan_raw_text_expr(TSLexer *lexer) {
     char c = lexer->lookahead;
     int inner_curly_start = 0;
-    char quote = 0;
 
     while (c) {
       switch (c) {
       case '{': {
-        if (quote == 0)
-          inner_curly_start++;
+        inner_curly_start++;
         break;
       }
       case '}': {
-        if (quote == 0) {
-          if (inner_curly_start <= 0) {
-            lexer->mark_end(lexer);
-            lexer->result_symbol = RAW_TEXT_EXPR;
-            return true;
-          }
-          inner_curly_start--;
+        if (inner_curly_start <= 0) {
+          lexer->mark_end(lexer);
+          lexer->result_symbol = RAW_TEXT_EXPR;
+          return true;
         }
+        inner_curly_start--;
         break;
       }
-      case '\\': {
-        if (quote != 0) {
-          lexer->advance(lexer, false);
-        }
-        break;
+      case '@': {
+        return false;
       }
       case '"':
       case '\'':
       case '`': {
-        if (quote == 0)
-          quote = c;
-        else if (quote == c)
-          quote = 0;
+        char quote = c;
+        lexer->advance(lexer, false);
+        c = lexer->lookahead;
+        while (c) {
+          if (c == 0)
+            return false;
+          if (c == '\\') {
+            lexer->advance(lexer, false);
+          }
+          if (c == quote) {
+            break;
+          }
+          lexer->advance(lexer, false);
+          c = lexer->lookahead;
+        }
         break;
       }
       default:;
@@ -297,8 +328,26 @@ struct Scanner {
       lexer->advance(lexer, true);
     }
 
+    /* printf("1|>%c|%d|%d\n", lexer->lookahead, valid_symbols[RAW_TEXT_EXPR],
+     */
+    /*        valid_symbols[HTML]); */
+
+    int html = 0;
+
+    if (valid_symbols[HTML]) {
+      html = scan_html(lexer);
+    }
+
     if (valid_symbols[RAW_TEXT_EXPR]) {
-      return scan_raw_text_expr(lexer);
+      if (html == 1) {
+        lexer->result_symbol = HTML;
+        lexer->mark_end(lexer);
+        return true;
+      } else if (html == -1) {
+        return false;
+      } else {
+        return scan_raw_text_expr(lexer);
+      }
     }
 
     if (valid_symbols[RAW_TEXT] && !valid_symbols[START_TAG_NAME] &&

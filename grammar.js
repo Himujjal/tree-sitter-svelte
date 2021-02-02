@@ -14,6 +14,7 @@ module.exports = grammar({
     $.raw_text,
     $.raw_text_expr,
     $.comment,
+    $.html,
   ],
 
   extras: () => [/\s+/],
@@ -27,7 +28,7 @@ module.exports = grammar({
         $._text,
         $.script_element,
         $.style_element,
-        $.html_block,
+        // $.html_block,
         $.element,
         $.special_block_start,
         $.special_block_intermediate,
@@ -44,7 +45,7 @@ module.exports = grammar({
         $.self_closing_tag
       ),
 
-    html_block: ($) => seq("{@html", optional($.raw_text_expr), "}"),
+    // html_block: ($) => seq("{@html", optional($.raw_text_expr), "}"),
 
     special_block_start: ($) =>
       seq("{#", $._special_block_start_tag, $.raw_text_expr, "}"),
@@ -147,8 +148,13 @@ module.exports = grammar({
       ),
 
     // ------- svelte text ----------
-    _text: ($) => choice(alias(/[^<>{}\s]+/, $.text), $._expression),
+    _text: ($) =>
+      choice(alias(/[^<>{]+/, $.text), alias($._expression, $.expression)),
 
-    _expression: ($) => choice(seq("{", optional($.raw_text_expr), "}"), "{}"),
+    _expression: ($) =>
+      choice(
+        seq("{", choice($.raw_text_expr, seq($.html, $.raw_text_expr)), "}"),
+        "{}"
+      ),
   },
 });

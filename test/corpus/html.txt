@@ -43,6 +43,7 @@ Nested tags
 (document
   (element
     (start_tag (tag_name))
+    (text)
     (element
       (start_tag (tag_name))
       (text)
@@ -52,6 +53,7 @@ Nested tags
       (start_tag (tag_name))
       (text)
       (end_tag (tag_name)))
+    (text)
     (end_tag (tag_name))))
 
 ==================================
@@ -100,10 +102,12 @@ Custom tags
 (document
   (element
     (start_tag (tag_name))
+    (text)
     (element
       (start_tag (tag_name) (attribute (attribute_name)))
       (text)
       (end_tag (tag_name)))
+      (text)
     (end_tag (tag_name))))
 
 ==================================
@@ -119,9 +123,11 @@ Comments
 (document
   (comment)
   (comment)
+  (text)
   (element
     (start_tag (tag_name))
     (comment)
+    (text)
     (end_tag (tag_name))))
 
 ==================================
@@ -141,7 +147,6 @@ Raw text elements
 
 <script>
 </SCRIPT>
-
 ---
 
 (document
@@ -149,10 +154,12 @@ Raw text elements
     (start_tag (tag_name))
     (raw_text)
     (end_tag (tag_name)))
+  (text)
   (style_element
     (start_tag (tag_name))
     (raw_text)
     (end_tag (tag_name)))
+  (text)
   (script_element
     (start_tag (tag_name))
     (raw_text)
@@ -171,6 +178,7 @@ LI elements without close tags
 (document
   (element
     (start_tag (tag_name))
+    (text)
     (element (start_tag (tag_name)) (text))
     (element (start_tag (tag_name)) (text))
     (end_tag (tag_name))))
@@ -190,11 +198,12 @@ DT and DL elements without close tags
 (document
   (element
     (start_tag (tag_name))
+    (text)
     (element (start_tag (tag_name)) (text))
     (element (start_tag (tag_name)) (text))
-    (element (start_tag (tag_name)) (text) (text) (text))
     (element (start_tag (tag_name)) (text))
-    (element (start_tag (tag_name)) (text) (text) (text))
+    (element (start_tag (tag_name)) (text))
+    (element (start_tag (tag_name)) (text))
     (end_tag (tag_name))))
 
 ======================================
@@ -210,6 +219,7 @@ P elements without close tags
 (document
   (element (start_tag (tag_name)) (text))
   (element (start_tag (tag_name)) (text) (end_tag (tag_name)))
+  (text)
   (element (start_tag (tag_name)) (text))
   (element (start_tag (tag_name)) (text))
   (element (start_tag (tag_name)) (text) (end_tag (tag_name))))
@@ -247,8 +257,10 @@ COLGROUP elements without end tags
 (document
   (element
     (start_tag (tag_name))
+    (text)
     (element
       (start_tag (tag_name))
+      (text)
       (element (start_tag
         (tag_name)
         (attribute (attribute_name) (quoted_attribute_value (attribute_value)))))
@@ -257,10 +269,15 @@ COLGROUP elements without end tags
         (attribute (attribute_name) (quoted_attribute_value (attribute_value))))))
     (element
       (start_tag (tag_name))
+      (text)
       (element (start_tag (tag_name)) (text) (end_tag (tag_name)))
+      (text)
       (element (start_tag (tag_name)) (text) (end_tag (tag_name)))
+      (text)
       (element (start_tag (tag_name)) (text) (end_tag (tag_name)))
+      (text)
       (end_tag (tag_name)))
+      (text)
     (end_tag (tag_name))))
 
 =========================================
@@ -279,12 +296,15 @@ TR, TD, and TH elements without end tags
 (document
   (element
     (start_tag (tag_name))
+    (text)
     (element
       (start_tag (tag_name))
+      (text)
       (element (start_tag (tag_name)) (text))
       (element (start_tag (tag_name)) (text)))
     (element
       (start_tag (tag_name))
+      (text)
       (element (start_tag (tag_name)) (text))
       (element (start_tag (tag_name)) (text)))
     (end_tag (tag_name))))

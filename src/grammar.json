@@ -29,10 +29,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "html_block"
-        },
-        {
-          "type": "SYMBOL",
           "name": "element"
         },
         {
@@ -84,31 +80,6 @@
         {
           "type": "SYMBOL",
           "name": "self_closing_tag"
-        }
-      ]
-    },
-    "html_block": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "{@html"
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "raw_text_expr"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "STRING",
-          "value": "}"
         }
       ]
     },
@@ -654,14 +625,19 @@
           "type": "ALIAS",
           "content": {
             "type": "PATTERN",
-            "value": "[^<>{}\\s]+"
+            "value": "[^<>{]+"
           },
           "named": true,
           "value": "text"
         },
         {
-          "type": "SYMBOL",
-          "name": "_expression"
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_expression"
+          },
+          "named": true,
+          "value": "expression"
         }
       ]
     },
@@ -683,7 +659,17 @@
                   "name": "raw_text_expr"
                 },
                 {
-                  "type": "BLANK"
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "html"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "raw_text_expr"
+                    }
+                  ]
                 }
               ]
             },
@@ -747,6 +733,10 @@
     {
       "type": "SYMBOL",
       "name": "comment"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "html"
     }
   ],
   "inline": [],
