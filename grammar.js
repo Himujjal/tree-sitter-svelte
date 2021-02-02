@@ -27,6 +27,7 @@ module.exports = grammar({
         $._text,
         $.script_element,
         $.style_element,
+        $.html_block,
         $.element,
         $.special_block_start,
         $.special_block_intermediate,
@@ -42,6 +43,8 @@ module.exports = grammar({
         ),
         $.self_closing_tag
       ),
+
+    html_block: ($) => seq("{@html", optional($.raw_text_expr), "}"),
 
     special_block_start: ($) =>
       seq("{#", $._special_block_start_tag, $.raw_text_expr, "}"),

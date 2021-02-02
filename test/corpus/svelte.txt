@@ -54,7 +54,7 @@ Logical blocks
 {#each cats as cat}
     <li></li>
 {/each}
-
+{@html <p>hello world</p>}
 
 -------
 
@@ -78,6 +78,7 @@ Logical blocks
     (special_block_start (each_tag) (raw_text_expr))
     (element (start_tag (tag_name)) (end_tag (tag_name)))
     (special_block_end (each_tag))
+    (html_block (raw_text_expr))
 )
 
 
