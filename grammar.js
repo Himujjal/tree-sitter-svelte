@@ -13,8 +13,9 @@ module.exports = grammar({
     $._implicit_end_tag,
     $.raw_text,
     $.raw_text_expr,
+    $.raw_text_await,
+    $.raw_text_each,
     $.comment,
-    $.html,
   ],
 
   extras: () => [/\s+/],
@@ -22,17 +23,16 @@ module.exports = grammar({
   rules: {
     document: ($) => repeat($._node),
 
-    _node: ($) =>
+    _node: ($) => choice($.script_element, $.style_element, $._statement),
+
+    _statement: ($) =>
       choice(
         $.comment,
         $._text,
-        $.script_element,
-        $.style_element,
-        // $.html_block,
         $.element,
-        $.special_block_start,
-        $.special_block_intermediate,
-        $.special_block_end
+        $.if_statement
+        // $.each_statement,
+        // $.await_statement
       ),
 
     element: ($) =>
@@ -43,40 +43,6 @@ module.exports = grammar({
           choice($.end_tag, $._implicit_end_tag)
         ),
         $.self_closing_tag
-      ),
-
-    // html_block: ($) => seq("{@html", optional($.raw_text_expr), "}"),
-
-    special_block_start: ($) =>
-      seq("{#", $._special_block_start_tag, $.raw_text_expr, "}"),
-    _special_block_start_tag: ($) =>
-      choice(
-        alias("if", $.if_tag),
-        alias("each", $.each_tag),
-        alias("await", $.await_tag)
-      ),
-
-    special_block_intermediate: ($) =>
-      seq(
-        "{:",
-        $._special_block_intermediate_tag,
-        optional($.raw_text_expr),
-        "}"
-      ),
-    _special_block_intermediate_tag: ($) =>
-      choice(
-        alias(choice(seq("else if"), "elseif"), $.elseif_tag),
-        alias("else", $.else_tag),
-        alias("then", $.then_tag),
-        alias("catch", $.catch)
-      ),
-
-    special_block_end: ($) => seq("{/", $._special_block_end_tag, "}"),
-    _special_block_end_tag: ($) =>
-      choice(
-        alias("if", $.if_tag),
-        alias("each", $.each_tag),
-        alias("await", $.await_tag)
       ),
 
     start_tag: ($) =>
@@ -135,12 +101,12 @@ module.exports = grammar({
             )
           )
         ),
-        alias($._expression, $.attribute_name)
+        alias($.expression, $.attribute_name)
       ),
 
     attribute_name: () => /[^<>{}"'/=\s]+/,
     attribute_value: ($) => /[^<>{}"'/=\s]+/,
-    expr_attribute_value: ($) => $._expression,
+    expr_attribute_value: ($) => $.expression,
     quoted_attribute_value: ($) =>
       choice(
         seq("'", optional(alias(/[^']+/, $.attribute_value)), "'"),
@@ -148,13 +114,79 @@ module.exports = grammar({
       ),
 
     // ------- svelte text ----------
-    _text: ($) =>
-      choice(alias(/[^<>{]+/, $.text), alias($._expression, $.expression)),
+    _text: ($) => choice(alias(/[^<>{}]+/, $.text), $._expression),
 
     _expression: ($) =>
-      choice(
-        seq("{", choice($.raw_text_expr, seq($.html, $.raw_text_expr)), "}"),
-        "{}"
+      choice($.expression, $.html_expr, alias("{}", $.expression)),
+
+    expression: ($) => seq("{", $.raw_text_expr, "}"),
+
+    html_expr: ($) => seq("{", "@html", optional($.raw_text_expr), "}"),
+    each_start_expr: ($) =>
+      seq(
+        "{",
+        "#each",
+        choice(
+          $.raw_text_expr,
+          seq($.raw_text_each, alias("as", $.as), $.raw_text_expr)
+        ),
+        "}"
       ),
+
+    each_end_expr: () => seq("{", "/each", "}"),
+
+    await_start_expr: ($) =>
+      seq(
+        "{",
+        "#await",
+        choice(
+          $.raw_text_expr,
+          seq($.raw_text_await, alias("then", $.then), $.raw_text_expr)
+        ),
+        "}"
+      ),
+    then_expr: ($) => seq("{", ":then", optional($.raw_text_expr), "}"),
+    catch_expr: ($) => seq("{", ":catch", optional($.raw_text_expr), "}"),
+    await_end_expr: ($) => seq("{", "/await", "}"),
+
+    if_statement: ($) =>
+      prec.left(
+        seq(
+          $.if_start_expr,
+          repeat($._statement),
+          // repeat($.else_if_statement),
+          optional($.else_statement),
+          $.if_end_expr
+        )
+      ),
+
+    else_if_statement: ($) => seq($.else_if_expr, repeat($._statement)),
+
+    else_statement: ($) => prec.right(seq($.else_expr, repeat($._statement))),
+
+    if_start_expr: ($) => seq("{", "#if", $.raw_text_expr, "}"),
+    else_expr: ($) => seq("{", ":else", "}"),
+    else_if_expr: ($) =>
+      seq("{", ":else", "if", optional($.raw_text_expr), "}"),
+    if_end_expr: ($) => seq("{", "/if", "}"),
+
+    each_statement: ($) =>
+      prec.right(seq($.each_start_expr, repeat($._statement), $.each_end_expr)),
+
+    await_statement: ($) =>
+      seq(
+        prec.left(
+          seq(
+            $.await_start_expr,
+            repeat($._statement),
+            repeat($.then_statement),
+            optional($.catch_statement),
+            $.await_end_expr
+          )
+        )
+      ),
+
+    then_statement: ($) => prec.left(seq($.then_expr, repeat($._statement))),
+    catch_statement: ($) => prec.left(seq($.catch_expr, repeat($._statement))),
   },
 });

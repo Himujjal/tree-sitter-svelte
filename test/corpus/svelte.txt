@@ -31,70 +31,106 @@ Dynamic Expression Attribute
 (document
     (element
         (start_tag (tag_name)
-            (attribute (attribute_name) (expr_attribute_value (raw_text_expr)))
+            (attribute (attribute_name) (expr_attribute_value (expression (raw_text_expr))))
             (attribute (attribute_name) (quoted_attribute_value (attribute_value)))
         )
         
     )
-    (element (self_closing_tag (tag_name)
+    (element
+        (self_closing_tag
+            (tag_name)
             (attribute (attribute_name (raw_text_expr)))
         )
     )
 )
 
-
 ===============
 Logical blocks
 ===============
-{#if user.loggedIn}
+{#if user.loggedIn}hello
 	<button on:click={toggle}>logged in</button>
 {:else if hello}
-    <li></li>
+    <li></li> 
+{:else}
 {/if}
-
 {hello}
-
 {#each cats as cat}
     <li></li>
 {/each}
-}
 
-{@html '<p>hello world</p>'}
-
-{new Instance(hello).map(() => {console.log('hello')})}
+{ thenRandomExpr }
+{ @html '<p>hello world</p>'}
+{{}}
 -------
-
 (document
-    (special_block_start (if_tag) (raw_text_expr))
-    (text)
-    (element
-        (start_tag
-            (tag_name)
-            (attribute (attribute_name) (expr_attribute_value (raw_text_expr)))
+    (if_statement
+        (if_start_expr (raw_text_expr))
+        (text)
+        (element
+            (start_tag
+                (tag_name)
+                (attribute (attribute_name)
+                    (expr_attribute_value
+                        (expression (raw_text_expr))
+                    )
+                )
+            )
+            (text)
+            (end_tag (tag_name))
         )
         (text)
-        (end_tag (tag_name))
-    )
-    (text)
-    (special_block_intermediate (elseif_tag) (raw_text_expr))
-    (text)
-    (element (start_tag (tag_name)) (end_tag (tag_name)))
-    (text)
-    (special_block_end (if_tag))
-    (text)
-    (expression (raw_text_expr))
-    (text)
-    (special_block_start (each_tag) (raw_text_expr))
-    (text)
-    (element (start_tag (tag_name)) (end_tag (tag_name)))
-    (text)
-    (special_block_end (each_tag))
-    (text)
-    (expression (html) (raw_text_expr))
-    (text)
+        (else_if_statement
+            (else_if_expr (raw_text_expr)) (text)
+            (element
+                (start_tag (tag_name))
+                (end_tag (tag_name))
+            ) (text) 
+        )
+        (else_statement (else_expr) (text))
+        (if_end_expr) 
+    ) (text)
+    (expression (raw_text_expr)) (text)
+    (each_statement
+        (each_start_expr (raw_text_each) (as) (raw_text_expr)) (text)
+        (element (start_tag (tag_name)) (end_tag (tag_name))) (text)
+        (each_end_expr)
+    ) (text)
+    (expression (raw_text_expr)) (text)
+    (html_expr (raw_text_expr)) (text)
     (expression (raw_text_expr))
 )
 
+=======================
+Await
+========================
+{#await promise}
+{:then number}
+{:catch error}
+{/await}
+{#await promise then value}
+    <p></p>
+{/await}
+{#await yo thenvalue}
+{/await}
+------
+(document
+    (await_statement
+        (await_start_expr (raw_text_expr)) (text)
+        (then_statement (then_expr (raw_text_expr)) (text))
+        (catch_statement (catch_expr (raw_text_expr)) (text))
+        (await_end_expr)
+    )
+    (text)
+    (await_statement
+        (await_start_expr (raw_text_await) (then) (raw_text_expr)) (text)
+        (element (start_tag (tag_name)) (end_tag (tag_name))) (text)
+        (await_end_expr)
+    ) (text)
+    (await_statement
+        (await_start_expr (raw_text_expr)) (text)
+        (await_end_expr)
+    )
+)
 
 ====================
 Special elements
@@ -120,9 +156,32 @@ Special elements
     (text)
     (element
         (self_closing_tag (tag_name)
-            (attribute (attribute_name) (expr_attribute_value (raw_text_expr)))
+            (attribute (attribute_name)
+                (expr_attribute_value (expression (raw_text_expr)))
+            )
         )
     )
 )
 
-
+==========
+temp
+==========
+{#if user}
+{:else}
+    {#if hello }
+    {/if}
+{/if}
+---
+(document 
+    (if_statement
+        (if_start_expr (raw_text_expr)) (text)
+        (else_statement
+            (else_expr) (text)
+            (if_statement
+                (if_start_expr (raw_text_expr)) (text)
+                (if_end_expr)
+            ) 
+        ) (text)
+        (if_end_expr) 
+    )
+)

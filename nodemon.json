@@ -1,5 +1,5 @@
 {
   "watch": ["grammar.js", "src/scanner.cc", "test/corpus/*.txt"],
   "ext": "txt,js,c",
-  "exec": "tree-sitter generate && tree-sitter test"
+  "exec": "tree-sitter generate && tree-sitter test -f temp"
 }

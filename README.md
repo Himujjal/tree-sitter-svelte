@@ -44,6 +44,11 @@ console.log(tree.rootNode.toString());
 
 ```
 
+# TODO
+
+- [ ] If_blocks
+- [ ] as keyword in javascript
+
 # LICENSE
 
 [MIT](./LICENSE)

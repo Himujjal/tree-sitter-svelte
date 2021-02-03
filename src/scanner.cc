@@ -23,8 +23,9 @@ enum TokenType {
   IMPLICIT_END_TAG,
   RAW_TEXT,
   RAW_TEXT_EXPR,
+  RAW_TEXT_AWAIT,
+  RAW_TEXT_EACH,
   COMMENT,
-  HTML
 };
 
 struct Scanner {
@@ -126,83 +127,6 @@ struct Scanner {
       }
       lexer->advance(lexer, false);
     }
-    return false;
-  }
-
-  /**
-   * @returns -1 for no '@', 1 for success, 0 for 'failure
-   * */
-  int scan_html(TSLexer *lexer) {
-    if (lexer->lookahead != '@')
-      return 0;
-    lexer->advance(lexer, false);
-    if (lexer->lookahead == 'h') {
-      lexer->advance(lexer, false);
-      if (lexer->lookahead == 't') {
-        lexer->advance(lexer, false);
-        if (lexer->lookahead == 'm') {
-          lexer->advance(lexer, false);
-          if (lexer->lookahead == 'l') {
-            lexer->advance(lexer, false);
-            if (iswspace(lexer->lookahead)) {
-              return 1;
-            }
-            return -1;
-          }
-        }
-      }
-    }
-    return -1;
-  }
-
-  bool scan_raw_text_expr(TSLexer *lexer) {
-    char c = lexer->lookahead;
-    int inner_curly_start = 0;
-
-    while (c) {
-      switch (c) {
-      case '{': {
-        inner_curly_start++;
-        break;
-      }
-      case '}': {
-        if (inner_curly_start <= 0) {
-          lexer->mark_end(lexer);
-          lexer->result_symbol = RAW_TEXT_EXPR;
-          return true;
-        }
-        inner_curly_start--;
-        break;
-      }
-      case '@': {
-        return false;
-      }
-      case '"':
-      case '\'':
-      case '`': {
-        char quote = c;
-        lexer->advance(lexer, false);
-        c = lexer->lookahead;
-        while (c) {
-          if (c == 0)
-            return false;
-          if (c == '\\') {
-            lexer->advance(lexer, false);
-          }
-          if (c == quote) {
-            break;
-          }
-          lexer->advance(lexer, false);
-          c = lexer->lookahead;
-        }
-        break;
-      }
-      default:;
-      }
-      lexer->advance(lexer, false);
-      c = lexer->lookahead;
-    }
-
     return false;
   }
 
@@ -323,31 +247,108 @@ struct Scanner {
     return false;
   }
 
+  bool scan_word(TSLexer *lexer, string word) {
+    char c = lexer->lookahead;
+    int i = 0;
+    while (c == word[i++]) {
+      lexer->advance(lexer, false);
+      c = lexer->lookahead;
+    }
+
+    return (c == '{' || iswspace(c));
+  }
+
+  bool scan_raw_text_expr(TSLexer *lexer, TokenType extraToken) {
+    char c = lexer->lookahead;
+    int inner_curly_start = 0;
+
+    while (c) {
+      switch (c) {
+      case '{': {
+        inner_curly_start++;
+        break;
+      }
+      case '}': {
+        if (inner_curly_start <= 0) {
+          lexer->mark_end(lexer);
+          lexer->result_symbol = RAW_TEXT_EXPR;
+          return true;
+        }
+        inner_curly_start--;
+        break;
+      }
+      case '\n':
+      case '\t':
+      case ')':
+      case ' ': {
+        if (extraToken == RAW_TEXT_AWAIT || extraToken == RAW_TEXT_EACH) {
+          lexer->mark_end(lexer);
+          lexer->advance(lexer, false);
+          c = lexer->lookahead;
+          if (extraToken == RAW_TEXT_AWAIT && c == 't') {
+            if (scan_word(lexer, "then")) {
+              printf("0|>c:%c\n", lexer->lookahead);
+              lexer->result_symbol = RAW_TEXT_AWAIT;
+              return true;
+            }
+          } else if (extraToken == RAW_TEXT_EACH && c == 'a') {
+            if (scan_word(lexer, "as")) {
+              lexer->result_symbol = RAW_TEXT_EACH;
+              return true;
+            }
+          }
+        }
+        break;
+      }
+
+      case '"':
+      case '\'':
+      case '`': {
+        char quote = c;
+        lexer->advance(lexer, false);
+        c = lexer->lookahead;
+        while (c) {
+          if (c == 0)
+            return false;
+          if (c == '\\') {
+            lexer->advance(lexer, false);
+          }
+          if (c == quote) {
+            break;
+          }
+          lexer->advance(lexer, false);
+          c = lexer->lookahead;
+        }
+        break;
+      }
+      default:;
+      }
+      lexer->advance(lexer, false);
+      c = lexer->lookahead;
+    }
+
+    return false;
+  }
+
   bool scan(TSLexer *lexer, const bool *valid_symbols) {
     while (iswspace(lexer->lookahead)) {
       lexer->advance(lexer, true);
     }
 
-    /* printf("1|>%c|%d|%d\n", lexer->lookahead, valid_symbols[RAW_TEXT_EXPR],
-     */
-    /*        valid_symbols[HTML]); */
+    if (valid_symbols[RAW_TEXT_EXPR] && valid_symbols[RAW_TEXT_AWAIT]) {
+      return scan_raw_text_expr(lexer, RAW_TEXT_AWAIT);
+    }
 
-    int html = 0;
-
-    if (valid_symbols[HTML]) {
-      html = scan_html(lexer);
+    if (valid_symbols[RAW_TEXT_EXPR] && valid_symbols[RAW_TEXT_EACH]) {
+      return scan_raw_text_expr(lexer, RAW_TEXT_EACH);
     }
 
     if (valid_symbols[RAW_TEXT_EXPR]) {
-      if (html == 1) {
-        lexer->result_symbol = HTML;
-        lexer->mark_end(lexer);
-        return true;
-      } else if (html == -1) {
+      char c = lexer->lookahead;
+      if (c == '@' || c == '#' || c == ':' || c == '/') {
         return false;
-      } else {
-        return scan_raw_text_expr(lexer);
       }
+      return scan_raw_text_expr(lexer, RAW_TEXT_EXPR);
     }
 
     if (valid_symbols[RAW_TEXT] && !valid_symbols[START_TAG_NAME] &&
