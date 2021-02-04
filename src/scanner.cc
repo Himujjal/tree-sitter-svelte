@@ -6,8 +6,6 @@
 #include <string>
 #include <vector>
 
-#include <iostream>
-
 namespace {
 
 using std::string;
@@ -287,7 +285,6 @@ struct Scanner {
           c = lexer->lookahead;
           if (extraToken == RAW_TEXT_AWAIT && c == 't') {
             if (scan_word(lexer, "then")) {
-              printf("0|>c:%c\n", lexer->lookahead);
               lexer->result_symbol = RAW_TEXT_AWAIT;
               return true;
             }
@@ -331,23 +328,19 @@ struct Scanner {
   }
 
   bool scan(TSLexer *lexer, const bool *valid_symbols) {
-    while (iswspace(lexer->lookahead)) {
+    while (iswspace(lexer->lookahead))
       lexer->advance(lexer, true);
-    }
 
-    if (valid_symbols[RAW_TEXT_EXPR] && valid_symbols[RAW_TEXT_AWAIT]) {
+    if (valid_symbols[RAW_TEXT_EXPR] && valid_symbols[RAW_TEXT_AWAIT])
       return scan_raw_text_expr(lexer, RAW_TEXT_AWAIT);
-    }
 
-    if (valid_symbols[RAW_TEXT_EXPR] && valid_symbols[RAW_TEXT_EACH]) {
+    if (valid_symbols[RAW_TEXT_EXPR] && valid_symbols[RAW_TEXT_EACH])
       return scan_raw_text_expr(lexer, RAW_TEXT_EACH);
-    }
 
     if (valid_symbols[RAW_TEXT_EXPR]) {
       char c = lexer->lookahead;
-      if (c == '@' || c == '#' || c == ':' || c == '/') {
+      if (c == '@' || c == '#' || c == ':' || c == '/')
         return false;
-      }
       return scan_raw_text_expr(lexer, RAW_TEXT_EXPR);
     }
 

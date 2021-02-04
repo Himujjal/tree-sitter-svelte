@@ -30,16 +30,16 @@ module.exports = grammar({
         $.comment,
         $._text,
         $.element,
-        $.if_statement
-        // $.each_statement,
-        // $.await_statement
+        $.if_statement,
+        $.each_statement,
+        $.await_statement
       ),
 
     element: ($) =>
       choice(
         seq(
           $.start_tag,
-          repeat($._node),
+          repeat($._statement),
           choice($.end_tag, $._implicit_end_tag)
         ),
         $.self_closing_tag
@@ -113,7 +113,6 @@ module.exports = grammar({
         seq('"', optional(alias(/[^"]+/, $.attribute_value)), '"')
       ),
 
-    // ------- svelte text ----------
     _text: ($) => choice(alias(/[^<>{}]+/, $.text), $._expression),
 
     _expression: ($) =>
@@ -122,6 +121,39 @@ module.exports = grammar({
     expression: ($) => seq("{", $.raw_text_expr, "}"),
 
     html_expr: ($) => seq("{", "@html", optional($.raw_text_expr), "}"),
+    // ------------ if-else ------------------
+
+    if_statement: ($) =>
+      seq(
+        $.if_start_expr,
+        repeat($._statement),
+        choice($.else_if_statement, $.else_statement, $.if_end_expr)
+      ),
+
+    else_if_statement: ($) =>
+      seq(
+        $.else_if_expr,
+        repeat($._statement),
+        choice($.if_end_expr, $.else_statement, $.else_if_statement)
+      ),
+
+    else_statement: ($) =>
+      seq($.else_expr, repeat($._statement), $.if_end_expr),
+
+    if_start_expr: ($) => seq("{", "#if", $.raw_text_expr, "}"),
+
+    else_expr: ($) => seq("{", ":else", "}"),
+
+    else_if_expr: ($) =>
+      seq("{", ":else", "if", optional($.raw_text_expr), "}"),
+
+    if_end_expr: ($) => seq("{", "/if", "}"),
+
+    // ----------- each and await ------------
+
+    each_statement: ($) =>
+      seq($.each_start_expr, repeat($._statement), $.each_end_expr),
+
     each_start_expr: ($) =>
       seq(
         "{",
@@ -134,6 +166,25 @@ module.exports = grammar({
       ),
 
     each_end_expr: () => seq("{", "/each", "}"),
+
+    await_statement: ($) =>
+      prec.right(
+        seq(
+          $.await_start_expr,
+          repeat($._statement),
+          choice($.then_statement, $.catch_statement, $.await_end_expr)
+        )
+      ),
+
+    then_statement: ($) =>
+      seq(
+        $.then_expr,
+        repeat($._statement),
+        choice($.await_end_expr, $.catch_statement)
+      ),
+
+    catch_statement: ($) =>
+      seq($.catch_expr, repeat($._statement), $.await_end_expr),
 
     await_start_expr: ($) =>
       seq(
@@ -148,45 +199,5 @@ module.exports = grammar({
     then_expr: ($) => seq("{", ":then", optional($.raw_text_expr), "}"),
     catch_expr: ($) => seq("{", ":catch", optional($.raw_text_expr), "}"),
     await_end_expr: ($) => seq("{", "/await", "}"),
-
-    if_statement: ($) =>
-      prec.left(
-        seq(
-          $.if_start_expr,
-          repeat($._statement),
-          // repeat($.else_if_statement),
-          optional($.else_statement),
-          $.if_end_expr
-        )
-      ),
-
-    else_if_statement: ($) => seq($.else_if_expr, repeat($._statement)),
-
-    else_statement: ($) => prec.right(seq($.else_expr, repeat($._statement))),
-
-    if_start_expr: ($) => seq("{", "#if", $.raw_text_expr, "}"),
-    else_expr: ($) => seq("{", ":else", "}"),
-    else_if_expr: ($) =>
-      seq("{", ":else", "if", optional($.raw_text_expr), "}"),
-    if_end_expr: ($) => seq("{", "/if", "}"),
-
-    each_statement: ($) =>
-      prec.right(seq($.each_start_expr, repeat($._statement), $.each_end_expr)),
-
-    await_statement: ($) =>
-      seq(
-        prec.left(
-          seq(
-            $.await_start_expr,
-            repeat($._statement),
-            repeat($.then_statement),
-            optional($.catch_statement),
-            $.await_end_expr
-          )
-        )
-      ),
-
-    then_statement: ($) => prec.left(seq($.then_expr, repeat($._statement))),
-    catch_statement: ($) => prec.left(seq($.catch_expr, repeat($._statement))),
   },
 });

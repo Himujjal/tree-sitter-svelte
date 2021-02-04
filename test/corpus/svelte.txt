@@ -45,7 +45,7 @@ Dynamic Expression Attribute
 )
 
 ===============
-Logical blocks
+logical_blocks
 ===============
 {#if user.loggedIn}hello
 	<button on:click={toggle}>logged in</button>
@@ -85,9 +85,10 @@ Logical blocks
                 (start_tag (tag_name))
                 (end_tag (tag_name))
             ) (text) 
+            (else_statement (else_expr) (text)
+                (if_end_expr) 
+            )
         )
-        (else_statement (else_expr) (text))
-        (if_end_expr) 
     ) (text)
     (expression (raw_text_expr)) (text)
     (each_statement
@@ -101,12 +102,13 @@ Logical blocks
 )
 
 =======================
-Await
+await
 ========================
 {#await promise}
 {:then number}
 {:catch error}
 {/await}
+
 {#await promise then value}
     <p></p>
 {/await}
@@ -116,9 +118,11 @@ Await
 (document
     (await_statement
         (await_start_expr (raw_text_expr)) (text)
-        (then_statement (then_expr (raw_text_expr)) (text))
-        (catch_statement (catch_expr (raw_text_expr)) (text))
-        (await_end_expr)
+        (then_statement (then_expr (raw_text_expr)) (text)
+            (catch_statement (catch_expr (raw_text_expr)) (text)
+                (await_end_expr)
+            )
+        )
     )
     (text)
     (await_statement
@@ -163,25 +167,38 @@ Special elements
     )
 )
 
-==========
-temp
-==========
-{#if user}
+========================
+if-else-nested
+========================
+{#if something}
+    text
+{:else if someOtherThing}
+    text2
+  {#if something}
+    text3
+  {:elseif someOtherThing}
+    text4
+  {:else}
+    text5
+  {/if}
 {:else}
-    {#if hello }
-    {/if}
+    text6
 {/if}
 ---
-(document 
-    (if_statement
-        (if_start_expr (raw_text_expr)) (text)
-        (else_statement
-            (else_expr) (text)
-            (if_statement
-                (if_start_expr (raw_text_expr)) (text)
+(document
+    (if_statement (if_start_expr (raw_text_expr)) (text)
+        (else_if_statement (else_if_expr (raw_text_expr)) (text)
+            (if_statement (if_start_expr (raw_text_expr)) (text)
+                (else_if_statement
+                    (else_if_expr (raw_text_expr)) (text)
+                    (else_statement (else_expr) (text) (if_end_expr)
+                    )  
+                )
+            ) (text)
+            (else_statement (else_expr) (text)
                 (if_end_expr)
-            ) 
-        ) (text)
-        (if_end_expr) 
+            )
+        )
     )
 )
+

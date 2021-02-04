@@ -5,10 +5,19 @@ Tree-sitter grammar for [svelte](https://svelte.dev)
 # Install
 
 ```
-pnpm i tree-sitter-svelte tree-sitter
+npm i tree-sitter-svelte tree-sitter
 ```
 
 # Usage
+
+To get started with exploring the grammar in a web-ui. Run:
+
+NOTE: `emcc` must be installed and in your path 
+```sh
+npm run ui
+```
+
+To use the grammar from javascript:
 
 ```javascript
 const Parser = require("tree-sitter");
@@ -44,10 +53,17 @@ console.log(tree.rootNode.toString());
 
 ```
 
+# Other commands
+
 # TODO
 
-- [ ] If_blocks
-- [ ] as keyword in javascript
+HELP required with the below functions. In case someone is willing to use
+tree-sitter-svelte in future, please make a PR on the below two things.
+I give up on these. Really tried 
+
+- [ ] if-elseif-else blocks flattening. Right now its very much nested.
+    Run `tree-sitter test -f if-else-nested` to get an idea
+- [ ] await-then-catch block flattening 
 
 # LICENSE
 

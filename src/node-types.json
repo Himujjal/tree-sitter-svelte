@@ -75,6 +75,65 @@
     }
   },
   {
+    "type": "await_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "await_end_expr",
+          "named": true
+        },
+        {
+          "type": "await_start_expr",
+          "named": true
+        },
+        {
+          "type": "await_statement",
+          "named": true
+        },
+        {
+          "type": "catch_statement",
+          "named": true
+        },
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "each_statement",
+          "named": true
+        },
+        {
+          "type": "element",
+          "named": true
+        },
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "html_expr",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        },
+        {
+          "type": "then_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "catch_expr",
     "named": true,
     "fields": {},
@@ -98,11 +157,23 @@
       "required": true,
       "types": [
         {
+          "type": "await_end_expr",
+          "named": true
+        },
+        {
+          "type": "await_statement",
+          "named": true
+        },
+        {
           "type": "catch_expr",
           "named": true
         },
         {
           "type": "comment",
+          "named": true
+        },
+        {
+          "type": "each_statement",
           "named": true
         },
         {
@@ -137,7 +208,15 @@
       "required": false,
       "types": [
         {
+          "type": "await_statement",
+          "named": true
+        },
+        {
           "type": "comment",
+          "named": true
+        },
+        {
+          "type": "each_statement",
           "named": true
         },
         {
@@ -200,6 +279,57 @@
     }
   },
   {
+    "type": "each_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "await_statement",
+          "named": true
+        },
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "each_end_expr",
+          "named": true
+        },
+        {
+          "type": "each_start_expr",
+          "named": true
+        },
+        {
+          "type": "each_statement",
+          "named": true
+        },
+        {
+          "type": "element",
+          "named": true
+        },
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "html_expr",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "element",
     "named": true,
     "fields": {},
@@ -208,7 +338,15 @@
       "required": true,
       "types": [
         {
+          "type": "await_statement",
+          "named": true
+        },
+        {
           "type": "comment",
+          "named": true
+        },
+        {
+          "type": "each_statement",
           "named": true
         },
         {
@@ -232,19 +370,11 @@
           "named": true
         },
         {
-          "type": "script_element",
-          "named": true
-        },
-        {
           "type": "self_closing_tag",
           "named": true
         },
         {
           "type": "start_tag",
-          "named": true
-        },
-        {
-          "type": "style_element",
           "named": true
         },
         {
@@ -275,6 +405,65 @@
     }
   },
   {
+    "type": "else_if_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "await_statement",
+          "named": true
+        },
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "each_statement",
+          "named": true
+        },
+        {
+          "type": "element",
+          "named": true
+        },
+        {
+          "type": "else_if_expr",
+          "named": true
+        },
+        {
+          "type": "else_if_statement",
+          "named": true
+        },
+        {
+          "type": "else_statement",
+          "named": true
+        },
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "html_expr",
+          "named": true
+        },
+        {
+          "type": "if_end_expr",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "text",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "else_statement",
     "named": true,
     "fields": {},
@@ -283,7 +472,15 @@
       "required": true,
       "types": [
         {
+          "type": "await_statement",
+          "named": true
+        },
+        {
           "type": "comment",
+          "named": true
+        },
+        {
+          "type": "each_statement",
           "named": true
         },
         {
@@ -300,6 +497,10 @@
         },
         {
           "type": "html_expr",
+          "named": true
+        },
+        {
+          "type": "if_end_expr",
           "named": true
         },
         {
@@ -402,11 +603,23 @@
       "required": true,
       "types": [
         {
+          "type": "await_statement",
+          "named": true
+        },
+        {
           "type": "comment",
           "named": true
         },
         {
+          "type": "each_statement",
+          "named": true
+        },
+        {
           "type": "element",
+          "named": true
+        },
+        {
+          "type": "else_if_statement",
           "named": true
         },
         {
@@ -563,7 +776,23 @@
       "required": true,
       "types": [
         {
+          "type": "await_end_expr",
+          "named": true
+        },
+        {
+          "type": "await_statement",
+          "named": true
+        },
+        {
+          "type": "catch_statement",
+          "named": true
+        },
+        {
           "type": "comment",
+          "named": true
+        },
+        {
+          "type": "each_statement",
           "named": true
         },
         {

@@ -8,7 +8,9 @@
     "gen": "tree-sitter generate",
     "gentsdef": "node ./script/generateTSDefinition.js",
     "start": "nodemon",
-    "publish": "np --no-tests --no-2fa --no-yarn"
+    "publish": "np --no-tests --no-2fa --no-yarn",
+    "wasm": "tree-sitter build-wasm",
+    "ui": "tree-sitter build-wasm && tree-sitter web-ui"
   },
   "repository": {
     "type": "git",
