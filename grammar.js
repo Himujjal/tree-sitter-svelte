@@ -120,7 +120,12 @@ module.exports = grammar({
 
     expression: ($) => seq("{", $.raw_text_expr, "}"),
 
-    html_expr: ($) => seq("{", "@html", optional($.raw_text_expr), "}"),
+    html_expr: ($) => seq(
+      "{", "@",
+      alias("html", $.special_block_keyword),
+      optional($.raw_text_expr),
+      "}"
+    ),
     // ------------ if-else ------------------
 
     if_statement: ($) =>
@@ -140,14 +145,19 @@ module.exports = grammar({
     else_statement: ($) =>
       seq($.else_expr, repeat($._statement), $.if_end_expr),
 
-    if_start_expr: ($) => seq("{", "#if", $.raw_text_expr, "}"),
+    if_start_expr: ($) => seq("{", "#", alias("if", $.special_block_keyword), $.raw_text_expr, "}"),
 
-    else_expr: ($) => seq("{", ":else", "}"),
+    else_expr: ($) => seq("{", ":", alias("else", $.special_block_keyword), "}"),
 
-    else_if_expr: ($) =>
-      seq("{", ":else", "if", optional($.raw_text_expr), "}"),
+    else_if_expr: ($) => seq(
+      "{", ":",
+      alias("else", $.special_block_keyword),
+      alias("if", $.special_block_keyword),
+      optional($.raw_text_expr),
+      "}"
+    ),
 
-    if_end_expr: ($) => seq("{", "/if", "}"),
+    if_end_expr: ($) => seq("{", "/", alias("if", $.special_block_keyword), "}"),
 
     // ----------- each and await ------------
 
@@ -156,8 +166,8 @@ module.exports = grammar({
 
     each_start_expr: ($) =>
       seq(
-        "{",
-        "#each",
+        "{", "#",
+        alias("each", $.special_block_keyword),
         choice(
           $.raw_text_expr,
           seq($.raw_text_each, alias("as", $.as), $.raw_text_expr)
@@ -165,7 +175,8 @@ module.exports = grammar({
         "}"
       ),
 
-    each_end_expr: () => seq("{", "/each", "}"),
+    each_end_expr: ($) =>
+      seq("{", "/", alias("each", $.special_block_keyword), "}"),
 
     await_statement: ($) =>
       prec.right(
@@ -188,16 +199,26 @@ module.exports = grammar({
 
     await_start_expr: ($) =>
       seq(
-        "{",
-        "#await",
+        "{", "#",
+        alias("await", $.special_block_keyword),
         choice(
           $.raw_text_expr,
           seq($.raw_text_await, alias("then", $.then), $.raw_text_expr)
         ),
         "}"
       ),
-    then_expr: ($) => seq("{", ":then", optional($.raw_text_expr), "}"),
-    catch_expr: ($) => seq("{", ":catch", optional($.raw_text_expr), "}"),
-    await_end_expr: ($) => seq("{", "/await", "}"),
+    then_expr: ($) => seq(
+      "{", ":",
+      alias("then", $.special_block_keyword),
+      optional($.raw_text_expr),
+      "}"
+    ),
+    catch_expr: ($) => seq(
+      "{", ":",
+      alias("catch", $.special_block_keyword),
+      optional($.raw_text_expr),
+      "}"
+    ),
+    await_end_expr: ($) => seq("{", "/", alias("await", $.special_block_keyword), "}"),
   },
 });

@@ -49,7 +49,17 @@
   {
     "type": "await_end_expr",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "special_block_keyword",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "await_start_expr",
@@ -65,6 +75,10 @@
         },
         {
           "type": "raw_text_expr",
+          "named": true
+        },
+        {
+          "type": "special_block_keyword",
           "named": true
         },
         {
@@ -138,11 +152,15 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
-      "required": false,
+      "multiple": true,
+      "required": true,
       "types": [
         {
           "type": "raw_text_expr",
+          "named": true
+        },
+        {
+          "type": "special_block_keyword",
           "named": true
         }
       ]
@@ -253,7 +271,17 @@
   {
     "type": "each_end_expr",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "special_block_keyword",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "each_start_expr",
@@ -273,6 +301,10 @@
         },
         {
           "type": "raw_text_expr",
+          "named": true
+        },
+        {
+          "type": "special_block_keyword",
           "named": true
         }
       ]
@@ -387,18 +419,32 @@
   {
     "type": "else_expr",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "special_block_keyword",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "else_if_expr",
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
-      "required": false,
+      "multiple": true,
+      "required": true,
       "types": [
         {
           "type": "raw_text_expr",
+          "named": true
+        },
+        {
+          "type": "special_block_keyword",
           "named": true
         }
       ]
@@ -564,11 +610,15 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
-      "required": false,
+      "multiple": true,
+      "required": true,
       "types": [
         {
           "type": "raw_text_expr",
+          "named": true
+        },
+        {
+          "type": "special_block_keyword",
           "named": true
         }
       ]
@@ -577,18 +627,32 @@
   {
     "type": "if_end_expr",
     "named": true,
-    "fields": {}
-  },
-  {
-    "type": "if_start_expr",
-    "named": true,
     "fields": {},
     "children": {
       "multiple": false,
       "required": true,
       "types": [
         {
+          "type": "special_block_keyword",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "if_start_expr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
           "type": "raw_text_expr",
+          "named": true
+        },
+        {
+          "type": "special_block_keyword",
           "named": true
         }
       ]
@@ -757,11 +821,15 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
-      "required": false,
+      "multiple": true,
+      "required": true,
       "types": [
         {
           "type": "raw_text_expr",
+          "named": true
+        },
+        {
+          "type": "special_block_keyword",
           "named": true
         }
       ]
@@ -827,15 +895,7 @@
     "named": false
   },
   {
-    "type": "#await",
-    "named": false
-  },
-  {
-    "type": "#each",
-    "named": false
-  },
-  {
-    "type": "#if",
+    "type": "#",
     "named": false
   },
   {
@@ -843,31 +903,15 @@
     "named": false
   },
   {
+    "type": "/",
+    "named": false
+  },
+  {
     "type": "/>",
     "named": false
   },
   {
-    "type": "/await",
-    "named": false
-  },
-  {
-    "type": "/each",
-    "named": false
-  },
-  {
-    "type": "/if",
-    "named": false
-  },
-  {
-    "type": ":catch",
-    "named": false
-  },
-  {
-    "type": ":else",
-    "named": false
-  },
-  {
-    "type": ":then",
+    "type": ":",
     "named": false
   },
   {
@@ -887,7 +931,7 @@
     "named": false
   },
   {
-    "type": "@html",
+    "type": "@",
     "named": false
   },
   {
@@ -903,10 +947,6 @@
     "named": true
   },
   {
-    "type": "if",
-    "named": false
-  },
-  {
     "type": "raw_text",
     "named": true
   },
@@ -920,6 +960,10 @@
   },
   {
     "type": "raw_text_expr",
+    "named": true
+  },
+  {
+    "type": "special_block_keyword",
     "named": true
   },
   {

@@ -366,11 +366,11 @@
     },
     "attribute_name": {
       "type": "PATTERN",
-      "value": "[^<>{}\"'\\/=\\s]+"
+      "value": "[^<>{}\"'/=\\s]+"
     },
     "attribute_value": {
       "type": "PATTERN",
-      "value": "[^<>{}\"'\\/=\\s]+"
+      "value": "[^<>{}\"'/=\\s]+"
     },
     "expr_attribute_value": {
       "type": "SYMBOL",
@@ -507,7 +507,16 @@
         },
         {
           "type": "STRING",
-          "value": "@html"
+          "value": "@"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "html"
+          },
+          "named": true,
+          "value": "special_block_keyword"
         },
         {
           "type": "CHOICE",
@@ -622,7 +631,16 @@
         },
         {
           "type": "STRING",
-          "value": "#if"
+          "value": "#"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "if"
+          },
+          "named": true,
+          "value": "special_block_keyword"
         },
         {
           "type": "SYMBOL",
@@ -643,7 +661,16 @@
         },
         {
           "type": "STRING",
-          "value": ":else"
+          "value": ":"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "else"
+          },
+          "named": true,
+          "value": "special_block_keyword"
         },
         {
           "type": "STRING",
@@ -660,11 +687,25 @@
         },
         {
           "type": "STRING",
-          "value": ":else"
+          "value": ":"
         },
         {
-          "type": "STRING",
-          "value": "if"
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "else"
+          },
+          "named": true,
+          "value": "special_block_keyword"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "if"
+          },
+          "named": true,
+          "value": "special_block_keyword"
         },
         {
           "type": "CHOICE",
@@ -693,7 +734,16 @@
         },
         {
           "type": "STRING",
-          "value": "/if"
+          "value": "/"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "if"
+          },
+          "named": true,
+          "value": "special_block_keyword"
         },
         {
           "type": "STRING",
@@ -730,7 +780,16 @@
         },
         {
           "type": "STRING",
-          "value": "#each"
+          "value": "#"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "each"
+          },
+          "named": true,
+          "value": "special_block_keyword"
         },
         {
           "type": "CHOICE",
@@ -778,7 +837,16 @@
         },
         {
           "type": "STRING",
-          "value": "/each"
+          "value": "/"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "each"
+          },
+          "named": true,
+          "value": "special_block_keyword"
         },
         {
           "type": "STRING",
@@ -881,7 +949,16 @@
         },
         {
           "type": "STRING",
-          "value": "#await"
+          "value": "#"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "await"
+          },
+          "named": true,
+          "value": "special_block_keyword"
         },
         {
           "type": "CHOICE",
@@ -929,7 +1006,16 @@
         },
         {
           "type": "STRING",
-          "value": ":then"
+          "value": ":"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "then"
+          },
+          "named": true,
+          "value": "special_block_keyword"
         },
         {
           "type": "CHOICE",
@@ -958,7 +1044,16 @@
         },
         {
           "type": "STRING",
-          "value": ":catch"
+          "value": ":"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "catch"
+          },
+          "named": true,
+          "value": "special_block_keyword"
         },
         {
           "type": "CHOICE",
@@ -987,7 +1082,16 @@
         },
         {
           "type": "STRING",
-          "value": "/await"
+          "value": "/"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "await"
+          },
+          "named": true,
+          "value": "special_block_keyword"
         },
         {
           "type": "STRING",
