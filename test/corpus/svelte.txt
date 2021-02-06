@@ -34,7 +34,7 @@ Dynamic Expression Attribute
             (attribute (attribute_name) (expr_attribute_value (expression (raw_text_expr))))
             (attribute (attribute_name) (quoted_attribute_value (attribute_value)))
         )
-        
+
     )
     (element
         (self_closing_tag
@@ -50,7 +50,7 @@ logical_blocks
 {#if user.loggedIn}hello
 	<button on:click={toggle}>logged in</button>
 {:else if hello}
-    <li></li> 
+    <li></li>
 {:else}
 {/if}
 {hello}
@@ -64,7 +64,7 @@ logical_blocks
 -------
 (document
     (if_statement
-        (if_start_expr (raw_text_expr))
+        (if_start_expr (special_block_keyword) (raw_text_expr))
         (text)
         (element
             (start_tag
@@ -80,24 +80,24 @@ logical_blocks
         )
         (text)
         (else_if_statement
-            (else_if_expr (raw_text_expr)) (text)
+            (else_if_expr (special_block_keyword) (special_block_keyword) (raw_text_expr)) (text)
             (element
                 (start_tag (tag_name))
                 (end_tag (tag_name))
-            ) (text) 
-            (else_statement (else_expr) (text)
-                (if_end_expr) 
+            ) (text)
+            (else_statement (else_expr (special_block_keyword)) (text)
+                (if_end_expr (special_block_keyword))
             )
         )
     ) (text)
     (expression (raw_text_expr)) (text)
     (each_statement
-        (each_start_expr (raw_text_each) (as) (raw_text_expr)) (text)
+        (each_start_expr (special_block_keyword) (raw_text_each) (as) (raw_text_expr)) (text)
         (element (start_tag (tag_name)) (end_tag (tag_name))) (text)
-        (each_end_expr)
+        (each_end_expr (special_block_keyword))
     ) (text)
     (expression (raw_text_expr)) (text)
-    (html_expr (raw_text_expr)) (text)
+    (html_expr (special_block_keyword) (raw_text_expr)) (text)
     (expression (raw_text_expr))
 )
 
@@ -117,22 +117,22 @@ await
 ------
 (document
     (await_statement
-        (await_start_expr (raw_text_expr)) (text)
-        (then_statement (then_expr (raw_text_expr)) (text)
-            (catch_statement (catch_expr (raw_text_expr)) (text)
-                (await_end_expr)
+        (await_start_expr (special_block_keyword) (raw_text_expr)) (text)
+        (then_statement (then_expr (special_block_keyword) (raw_text_expr)) (text)
+            (catch_statement (catch_expr (special_block_keyword) (raw_text_expr)) (text)
+                (await_end_expr (special_block_keyword))
             )
         )
     )
     (text)
     (await_statement
-        (await_start_expr (raw_text_await) (then) (raw_text_expr)) (text)
+        (await_start_expr (special_block_keyword) (raw_text_await) (then) (raw_text_expr)) (text)
         (element (start_tag (tag_name)) (end_tag (tag_name))) (text)
-        (await_end_expr)
+        (await_end_expr (special_block_keyword))
     ) (text)
     (await_statement
-        (await_start_expr (raw_text_expr)) (text)
-        (await_end_expr)
+        (await_start_expr (special_block_keyword) (raw_text_expr)) (text)
+        (await_end_expr (special_block_keyword))
     )
 )
 
@@ -186,17 +186,18 @@ if-else-nested
 {/if}
 ---
 (document
-    (if_statement (if_start_expr (raw_text_expr)) (text)
-        (else_if_statement (else_if_expr (raw_text_expr)) (text)
-            (if_statement (if_start_expr (raw_text_expr)) (text)
+    (if_statement (if_start_expr (special_block_keyword) (raw_text_expr)) (text)
+        (else_if_statement (else_if_expr (special_block_keyword) (special_block_keyword) (raw_text_expr)) (text)
+            (if_statement (if_start_expr (special_block_keyword) (raw_text_expr)) (text)
                 (else_if_statement
-                    (else_if_expr (raw_text_expr)) (text)
-                    (else_statement (else_expr) (text) (if_end_expr)
-                    )  
+                    (else_if_expr (special_block_keyword) (special_block_keyword) (raw_text_expr)) (text)
+                    (else_statement (else_expr (special_block_keyword)) (text)
+                    (if_end_expr (special_block_keyword))
+                    )
                 )
             ) (text)
-            (else_statement (else_expr) (text)
-                (if_end_expr)
+            (else_statement (else_expr (special_block_keyword)) (text)
+                (if_end_expr (special_block_keyword))
             )
         )
     )
