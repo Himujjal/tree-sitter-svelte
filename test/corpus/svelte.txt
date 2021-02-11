@@ -203,3 +203,25 @@ if-else-nested
     )
 )
 
+
+========================
+script-tag-inside-svelte:head
+========================
+<svelte:head>
+  <script>console.log("Hello World!")</script>
+</svelte:head>
+---
+(document
+  (element
+    (start_tag
+      (tag_name))
+    (text)
+    (script_element
+      (start_tag
+        (tag_name))
+      (raw_text)
+      (end_tag
+        (tag_name)))
+    (text)
+    (end_tag
+      (tag_name))))

@@ -137,6 +137,14 @@
           "named": true
         },
         {
+          "type": "script_element",
+          "named": true
+        },
+        {
+          "type": "style_element",
+          "named": true
+        },
+        {
           "type": "text",
           "named": true
         },
@@ -208,6 +216,14 @@
         },
         {
           "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "script_element",
+          "named": true
+        },
+        {
+          "type": "style_element",
           "named": true
         },
         {
@@ -355,6 +371,14 @@
           "named": true
         },
         {
+          "type": "script_element",
+          "named": true
+        },
+        {
+          "type": "style_element",
+          "named": true
+        },
+        {
           "type": "text",
           "named": true
         }
@@ -402,11 +426,19 @@
           "named": true
         },
         {
+          "type": "script_element",
+          "named": true
+        },
+        {
           "type": "self_closing_tag",
           "named": true
         },
         {
           "type": "start_tag",
+          "named": true
+        },
+        {
+          "type": "style_element",
           "named": true
         },
         {
@@ -503,6 +535,14 @@
           "named": true
         },
         {
+          "type": "script_element",
+          "named": true
+        },
+        {
+          "type": "style_element",
+          "named": true
+        },
+        {
           "type": "text",
           "named": true
         }
@@ -551,6 +591,14 @@
         },
         {
           "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "script_element",
+          "named": true
+        },
+        {
+          "type": "style_element",
           "named": true
         },
         {
@@ -708,6 +756,14 @@
         },
         {
           "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "script_element",
+          "named": true
+        },
+        {
+          "type": "style_element",
           "named": true
         },
         {
@@ -877,6 +933,14 @@
         },
         {
           "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "script_element",
+          "named": true
+        },
+        {
+          "type": "style_element",
           "named": true
         },
         {
