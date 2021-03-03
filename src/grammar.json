@@ -366,11 +366,11 @@
     },
     "attribute_name": {
       "type": "PATTERN",
-      "value": "[^<>{}\"'/=\\s]+"
+      "value": "[^<>{}\"'\\/=\\s]+"
     },
     "attribute_value": {
       "type": "PATTERN",
-      "value": "[^<>{}\"'/=\\s]+"
+      "value": "[^<>{}\"'\\/=\\s]+"
     },
     "expr_attribute_value": {
       "type": "SYMBOL",

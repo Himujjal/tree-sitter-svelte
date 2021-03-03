@@ -53,17 +53,6 @@ console.log(tree.rootNode.toString());
 
 ```
 
-# Other commands
-
-# TODO
-
-HELP required with the below functions. In case someone is willing to use
-tree-sitter-svelte in future, please make a PR on the below two things.
-I give up on these. Really tried 
-
-- [ ] if-elseif-else blocks flattening. Right now its very much nested.
-    Run `tree-sitter test -f if-else-nested` to get an idea
-- [ ] await-then-catch block flattening 
 
 # LICENSE
 
