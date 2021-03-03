@@ -39,7 +39,7 @@ module.exports = grammar({
       choice(
         seq(
           $.start_tag,
-          repeat($._statement),
+          repeat($._node),
           choice($.end_tag, $._implicit_end_tag)
         ),
         $.self_closing_tag
@@ -133,19 +133,18 @@ module.exports = grammar({
     if_statement: ($) =>
       seq(
         $.if_start_expr,
-        repeat($._statement),
+        repeat($._node),
         choice($.else_if_statement, $.else_statement, $.if_end_expr)
       ),
 
     else_if_statement: ($) =>
       seq(
         $.else_if_expr,
-        repeat($._statement),
+        repeat($._node),
         choice($.if_end_expr, $.else_statement, $.else_if_statement)
       ),
 
-    else_statement: ($) =>
-      seq($.else_expr, repeat($._statement), $.if_end_expr),
+    else_statement: ($) => seq($.else_expr, repeat($._node), $.if_end_expr),
 
     if_start_expr: ($) =>
       seq("{", "#", alias("if", $.special_block_keyword), $.raw_text_expr, "}"),
@@ -169,7 +168,7 @@ module.exports = grammar({
     // ----------- each and await ------------
 
     each_statement: ($) =>
-      seq($.each_start_expr, repeat($._statement), $.each_end_expr),
+      seq($.each_start_expr, repeat($._node), $.each_end_expr),
 
     each_start_expr: ($) =>
       seq(
@@ -190,7 +189,7 @@ module.exports = grammar({
       prec.right(
         seq(
           $.await_start_expr,
-          repeat($._statement),
+          repeat($._node),
           choice($.then_statement, $.catch_statement, $.await_end_expr)
         )
       ),
@@ -198,12 +197,12 @@ module.exports = grammar({
     then_statement: ($) =>
       seq(
         $.then_expr,
-        repeat($._statement),
+        repeat($._node),
         choice($.await_end_expr, $.catch_statement)
       ),
 
     catch_statement: ($) =>
-      seq($.catch_expr, repeat($._statement), $.await_end_expr),
+      seq($.catch_expr, repeat($._node), $.await_end_expr),
 
     await_start_expr: ($) =>
       seq(
