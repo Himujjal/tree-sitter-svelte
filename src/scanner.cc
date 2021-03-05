@@ -348,10 +348,32 @@ struct Scanner2 {
 
     return false;
   }
+  void printValidSymbols(const bool *valid_symbols) {
+#define printValid(x)                                                          \
+  if (valid_symbols[(x)])                                                      \
+  printf("%s, ", (#x))
+    printValid(START_TAG_NAME);
+    printValid(SCRIPT_START_TAG_NAME);
+    printValid(STYLE_START_TAG_NAME);
+    printValid(END_TAG_NAME);
+    printValid(ERRONEOUS_END_TAG_NAME);
+    printValid(SELF_CLOSING_TAG_DELIMITER);
+    printValid(IMPLICIT_END_TAG);
+    printValid(RAW_TEXT);
+    printValid(RAW_TEXT_EXPR);
+    printValid(RAW_TEXT_AWAIT);
+    printValid(RAW_TEXT_EACH);
+    printValid(COMMENT);
+#undef printValid
+    printf("\n");
+  }
 
   bool scan(TSLexer *lexer, const bool *valid_symbols) {
     while (iswspace(lexer->lookahead))
       lexer->advance(lexer, true);
+    printf("scan->%c,", lexer->lookahead);
+    printValidSymbols(valid_symbols);
+    cout << tags.size() << endl;
 
     if (valid_symbols[RAW_TEXT_EXPR] && valid_symbols[RAW_TEXT_AWAIT]) {
       return scan_raw_text_expr(lexer, RAW_TEXT_AWAIT);
@@ -390,7 +412,8 @@ struct Scanner2 {
 
     case '\0':
       if (valid_symbols[IMPLICIT_END_TAG]) {
-        return scan_implicit_end_tag(lexer);
+        bool b = scan_implicit_end_tag(lexer);
+        return b;
       }
       break;
 

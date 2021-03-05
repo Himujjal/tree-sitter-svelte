@@ -233,13 +233,13 @@ vc_vector *vc_vector_create_copy(const vc_vector *vector) {
 }
 
 void vc_vector_release(vc_vector *vector) {
-  if (vector->deleter != NULL) {
-    vc_vector_call_deleter_all(vector);
-  }
+  /* if (vector->deleter != NULL) { */
+  /*   vc_vector_call_deleter_all(vector); */
+  /* } */
 
-  if (vector->reserved_size != 0) {
-    /* free(vector->data); */
-  }
+  /* if (vector->reserved_size != 0) { */
+  /*   /1* free(vector->data); *1/ */
+  /* } */
 
   /* if (vector != NULL) */
   /* free(vector); */
@@ -475,6 +475,8 @@ bool vc_vector_resize(vc_vector *vector, size_t new_count, void *defaultValue) {
 
   for (int i = old_count; i < new_count; i++)
     memcpy(vector->data + i, defaultValue, vector->element_size);
+
+  vector->count = new_count;
 
   return true;
 }

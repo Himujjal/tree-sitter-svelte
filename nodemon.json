@@ -9,5 +9,5 @@
     "test/corpus/*.txt"
   ],
   "ext": "txt,js,c,hh,h",
-  "exec": "tree-sitter generate && tree-sitter test -f nested_tags"
+  "exec": "tree-sitter generate && tree-sitter test -f void_tags"
 }

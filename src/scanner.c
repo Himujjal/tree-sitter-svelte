@@ -159,7 +159,6 @@ bool scan_raw_text(Scanner *scanner, TSLexer *lexer) {
 }
 
 bool scan_implicit_end_tag(Scanner *scanner, TSLexer *lexer) {
-
   vc_vector *tags = scanner->tags;
   Tag *parent = tags->count == 0 ? NULL : vc_vector_back(tags);
 
@@ -210,7 +209,6 @@ bool scan_start_tag_name(Scanner *scanner, TSLexer *lexer) {
     return false;
 
   Tag *tag = for_name(scanner->A, scanner->m, &tag_name);
-  printTag(tag);
   vc_vector_push_back(scanner->tags, tag);
   switch (tag->type) {
   case SCRIPT:
@@ -228,8 +226,9 @@ bool scan_start_tag_name(Scanner *scanner, TSLexer *lexer) {
 
 bool scan_end_tag_name(Scanner *scanner, TSLexer *lexer) {
   ekstring tag_name = scan_tag_name(scanner, lexer);
-  if (tag_name.length == 0)
+  if (tag_name.length == 0) {
     return false;
+  }
   Tag *tag = for_name(scanner->A, scanner->m, &tag_name);
   vc_vector *tags = scanner->tags;
   if (tags->count > 0 && compareTags(vc_vector_back(tags), tag)) {
@@ -362,6 +361,9 @@ void printValidSymbols(const bool *valid_symbols) {
 bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
   while (iswspace(lexer->lookahead))
     lexer->advance(lexer, true);
+  /* printf("scan->%c,\n", lexer->lookahead); */
+  /* printValidSymbols(valid_symbols); */
+  /* printf("%ld\n", scanner->tags->count); */
 
   if (valid_symbols[RAW_TEXT_EXPR] && valid_symbols[RAW_TEXT_AWAIT]) {
     bool b = scan_raw_text_expr(scanner, lexer, RAW_TEXT_AWAIT);
@@ -394,14 +396,14 @@ bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
     }
 
     if (valid_symbols[IMPLICIT_END_TAG]) {
-      bool b = scan_implicit_end_tag(scanner, lexer);
-      return b;
+      return scan_implicit_end_tag(scanner, lexer);
     }
     break;
 
   case '\0':
     if (valid_symbols[IMPLICIT_END_TAG]) {
-      return scan_implicit_end_tag(scanner, lexer);
+      bool b = scan_implicit_end_tag(scanner, lexer);
+      return b;
     }
     break;
 
@@ -423,8 +425,8 @@ bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
 }
 
 void deleter(void *tag, za_Allocator *A) {
-  if (tag != NULL)
-    za_Free(A, tag);
+  /* if (tag != NULL) */
+  /*   za_Free(A, tag); */
 }
 void *tree_sitter_svelte_external_scanner_create() {
   za_Allocator *A = za_New();
@@ -452,5 +454,6 @@ void tree_sitter_svelte_external_scanner_deserialize(void *payload,
 }
 
 void tree_sitter_svelte_external_scanner_destroy(void *payload) {
+  printf("destroyed\n");
   za_Release(((Scanner *)payload)->A);
 }

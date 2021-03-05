@@ -35,7 +35,7 @@ bool compareTags(const Tag *a, const Tag *b) {
       return true;
     return false;
   }
-  if (a->type == b->type)
+  if (a->type != b->type)
     return false;
   if (a->type == CUSTOM &&
       !compare_string_string(a->custom_tag_name, b->custom_tag_name))

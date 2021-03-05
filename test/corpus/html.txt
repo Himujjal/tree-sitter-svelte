@@ -34,9 +34,7 @@ Tags with attributes
 nested_tags
 ===================================
 <div>
-  <span>a</span>
-  b
-  <b>c</b>
+  <span>Hello</span>
 </div>
 ---
 
@@ -44,20 +42,14 @@ nested_tags
   (element
     (start_tag (tag_name))
     (text)
-    (element
-      (start_tag (tag_name))
-      (text)
-      (end_tag (tag_name)))
+    (element (start_tag (tag_name)) (text) (end_tag (tag_name)))
     (text)
-    (element
-      (start_tag (tag_name))
-      (text)
-      (end_tag (tag_name)))
-    (text)
-    (end_tag (tag_name))))
+    (end_tag (tag_name))
+  )
+)
 
 ==================================
-Void tags
+void_tags
 ==================================
 <form><img src="something.png"><br><input type=submit value=Ok /></form>
 ---
