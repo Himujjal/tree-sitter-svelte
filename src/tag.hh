@@ -347,7 +347,7 @@ struct Tag {
     }
   }
 
-  // TODO: no idea what it does
+  // gets the tag for the current name
   static inline Tag for_name(const string &name) {
     map<string, TagType>::const_iterator type =
         TAG_TYPES_BY_TAG_NAME.find(name);

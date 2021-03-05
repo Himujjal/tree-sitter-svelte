@@ -3,11 +3,17 @@
 #include <algorithm>
 #include <cstring>
 #include <cwctype>
+#include <iostream>
+#include <string.h>
 #include <string>
 #include <vector>
 
+#include "utils/ekstring.h"
+
 namespace {
 
+using std::cout;
+using std::endl;
 using std::string;
 using std::vector;
 
@@ -26,10 +32,14 @@ enum TokenType {
   COMMENT,
 };
 
-struct Scanner {
+void copy_custom_tag(std::string str, char *buffer, unsigned int length) {
+  strncpy(buffer, str.c_str(), length);
+}
+
+struct Scanner2 {
   vector<Tag> tags;
 
-  Scanner() {}
+  Scanner2() {}
 
   unsigned serialize(char *buffer) {
     uint16_t tag_count = tags.size() > UINT16_MAX ? UINT16_MAX : tags.size();
@@ -49,7 +59,9 @@ struct Scanner {
           break;
         buffer[i++] = static_cast<char>(tag.type);
         buffer[i++] = name_length;
-        tag.custom_tag_name.copy(&buffer[i], name_length);
+        /* tag.custom_tag_name.copy(&buffer[i], name_length); */
+        /* ekstring str = init_string_char(); */
+        copy_custom_tag(tag.custom_tag_name, &buffer[i], name_length);
         i += name_length;
       } else {
         if (i + 1 >= TREE_SITTER_SERIALIZATION_BUFFER_SIZE)
@@ -61,6 +73,12 @@ struct Scanner {
     std::memcpy(&buffer[0], &serialized_tag_count,
                 sizeof(serialized_tag_count));
     return i;
+  }
+
+  void custom_tag_name_assign(std::string &tag, const char *buf,
+                              unsigned int length) {
+    std::string str(buf, length);
+    tag = str;
   }
 
   void deserialize(const char *buffer, unsigned length) {
@@ -157,7 +175,7 @@ struct Scanner {
   }
 
   bool scan_implicit_end_tag(TSLexer *lexer) {
-    Tag *parent = tags.empty() ? NULL : &tags.back();
+    Tag *parent = tags.empty() == 0 ? NULL : &tags.back();
 
     bool is_closing_tag = false;
     if (lexer->lookahead == '/') {
@@ -172,15 +190,17 @@ struct Scanner {
     }
 
     string tag_name = scan_tag_name(lexer);
-    if (tag_name.empty())
+    if (tag_name.size() == 0) {
       return false;
+    }
 
     Tag next_tag = Tag::for_name(tag_name);
 
     if (is_closing_tag) {
       // The tag correctly closes the topmost element on the stack
-      if (!tags.empty() && tags.back() == next_tag)
+      if (tags.size() != 0 && tags.back() == next_tag) {
         return false;
+      }
 
       // Otherwise, dig deeper and queue implicit end tags (to be nice in
       // the case of malformed svelte)
@@ -204,6 +224,7 @@ struct Scanner {
       return false;
     Tag tag = Tag::for_name(tag_name);
     tags.push_back(tag);
+
     switch (tag.type) {
     case SCRIPT:
       lexer->result_symbol = SCRIPT_START_TAG_NAME;
@@ -232,6 +253,7 @@ struct Scanner {
     return true;
   }
 
+  // NOTE: doesn't fire
   bool scan_self_closing_tag_delimiter(TSLexer *lexer) {
     lexer->advance(lexer, false);
     if (lexer->lookahead == '>') {
@@ -331,11 +353,13 @@ struct Scanner {
     while (iswspace(lexer->lookahead))
       lexer->advance(lexer, true);
 
-    if (valid_symbols[RAW_TEXT_EXPR] && valid_symbols[RAW_TEXT_AWAIT])
+    if (valid_symbols[RAW_TEXT_EXPR] && valid_symbols[RAW_TEXT_AWAIT]) {
       return scan_raw_text_expr(lexer, RAW_TEXT_AWAIT);
+    }
 
-    if (valid_symbols[RAW_TEXT_EXPR] && valid_symbols[RAW_TEXT_EACH])
+    if (valid_symbols[RAW_TEXT_EXPR] && valid_symbols[RAW_TEXT_EACH]) {
       return scan_raw_text_expr(lexer, RAW_TEXT_EACH);
+    }
 
     if (valid_symbols[RAW_TEXT_EXPR]) {
       char c = lexer->lookahead;
@@ -390,29 +414,29 @@ struct Scanner {
 
 extern "C" {
 
-void *tree_sitter_svelte_external_scanner_create() { return new Scanner(); }
+void *tree_sitter_svelte_external_scanner_create() { return new Scanner2(); }
 
 bool tree_sitter_svelte_external_scanner_scan(void *payload, TSLexer *lexer,
                                               const bool *valid_symbols) {
-  Scanner *scanner = static_cast<Scanner *>(payload);
+  Scanner2 *scanner = static_cast<Scanner2 *>(payload);
   return scanner->scan(lexer, valid_symbols);
 }
 
 unsigned tree_sitter_svelte_external_scanner_serialize(void *payload,
                                                        char *buffer) {
-  Scanner *scanner = static_cast<Scanner *>(payload);
+  Scanner2 *scanner = static_cast<Scanner2 *>(payload);
   return scanner->serialize(buffer);
 }
 
 void tree_sitter_svelte_external_scanner_deserialize(void *payload,
                                                      const char *buffer,
                                                      unsigned length) {
-  Scanner *scanner = static_cast<Scanner *>(payload);
+  Scanner2 *scanner = static_cast<Scanner2 *>(payload);
   scanner->deserialize(buffer, length);
 }
 
 void tree_sitter_svelte_external_scanner_destroy(void *payload) {
-  Scanner *scanner = static_cast<Scanner *>(payload);
+  Scanner2 *scanner = static_cast<Scanner2 *>(payload);
   delete scanner;
 }
 } // extern "C"

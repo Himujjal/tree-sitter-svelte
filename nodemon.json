@@ -1,5 +1,13 @@
 {
-  "watch": ["grammar.js", "src/scanner.cc", "test/corpus/*.txt"],
-  "ext": "txt,js,c",
-  "exec": "tree-sitter generate && tree-sitter test"
+  "watch": [
+    "grammar.js",
+    "src/scanner.cc",
+    "src/scanner.c",
+    "src/*.h",
+    "src/utils/*.h",
+    "src/*.hh",
+    "test/corpus/*.txt"
+  ],
+  "ext": "txt,js,c,hh,h",
+  "exec": "tree-sitter generate && tree-sitter test -f nested_tags"
 }

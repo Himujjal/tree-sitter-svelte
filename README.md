@@ -53,6 +53,13 @@ console.log(tree.rootNode.toString());
 
 ```
 
+# TODO
+
+- [ ] Move all C++ functions to C
+    - [ ] TagVector
+    - [ ] Tag
+    - [ ] cstring
+    - [ ] zzzAllocator
 
 # LICENSE
 
