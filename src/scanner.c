@@ -1,8 +1,5 @@
-#include "tag.h"
 #include "tree_sitter/parser.h"
-#include "utils/ekstring.h"
-#include "utils/hashmap.h"
-#include "utils/vector.h"
+#include "utils.h"
 #include <wctype.h>
 
 typedef enum TokenType {
@@ -26,10 +23,6 @@ typedef struct {
   struct hashmap_s *m;
 } Scanner;
 
-static inline void copy_custom_tag(ekstring str, char *buffer,
-                                   unsigned int length) {
-  strncpy(buffer, str.buf, length);
-}
 unsigned serialize(Scanner *scanner, char *buffer) {
   uint16_t tag_count =
       scanner->tags->count > UINT16_MAX ? UINT16_MAX : scanner->tags->count;
@@ -50,7 +43,7 @@ unsigned serialize(Scanner *scanner, char *buffer) {
         break;
       buffer[i++] = (char)(tag->type);
       buffer[i++] = name_length;
-      copy_custom_tag(tag->custom_tag_name, &buffer[i], name_length);
+      strncpy(&buffer[i], tag->custom_tag_name.buf, name_length);
       i += name_length;
     } else {
       if (i + 1 >= TREE_SITTER_SERIALIZATION_BUFFER_SIZE)
@@ -167,7 +160,6 @@ bool scan_implicit_end_tag(Scanner *scanner, TSLexer *lexer) {
     is_closing_tag = true;
     lexer->advance(lexer, false);
   } else if (parent && is_void(parent)) {
-    // use native implementation of pop_back
     vc_vector_pop_back(tags);
     lexer->result_symbol = IMPLICIT_END_TAG;
     return true;
@@ -181,19 +173,15 @@ bool scan_implicit_end_tag(Scanner *scanner, TSLexer *lexer) {
   Tag *next_tag = for_name(scanner->A, scanner->m, &tag_name);
 
   if (is_closing_tag) {
-    // The tag correctly closes the topmost element on the stack
     if (tags->count != 0 && compareTags(vc_vector_back(tags), next_tag)) {
       return false;
     }
 
-    // Otherwise, dig deeper and queue implicit end tags (to be nice in
-    // the case of malformed svelte)
     if (findTag(tags, next_tag)) {
       vc_vector_pop_back(tags);
       lexer->result_symbol = IMPLICIT_END_TAG;
       return true;
     }
-    // NOTE: can_contain(&parent, &next_tag);
   } else if (parent && !can_contain(parent, next_tag)) {
     vc_vector_pop_back(tags);
     lexer->result_symbol = IMPLICIT_END_TAG;
@@ -338,32 +326,9 @@ bool scan_raw_text_expr(Scanner *scanner, TSLexer *lexer,
   return false;
 }
 
-void printValidSymbols(const bool *valid_symbols) {
-#define printValid(x)                                                          \
-  if (valid_symbols[(x)])                                                      \
-  printf("%s, ", (#x))
-  printValid(START_TAG_NAME);
-  printValid(SCRIPT_START_TAG_NAME);
-  printValid(STYLE_START_TAG_NAME);
-  printValid(END_TAG_NAME);
-  printValid(ERRONEOUS_END_TAG_NAME);
-  printValid(SELF_CLOSING_TAG_DELIMITER);
-  printValid(IMPLICIT_END_TAG);
-  printValid(RAW_TEXT);
-  printValid(RAW_TEXT_EXPR);
-  printValid(RAW_TEXT_AWAIT);
-  printValid(RAW_TEXT_EACH);
-  printValid(COMMENT);
-#undef printValid
-  printf("\n");
-}
-
 bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
   while (iswspace(lexer->lookahead))
     lexer->advance(lexer, true);
-  /* printf("scan->%c,\n", lexer->lookahead); */
-  /* printValidSymbols(valid_symbols); */
-  /* printf("%ld\n", scanner->tags->count); */
 
   if (valid_symbols[RAW_TEXT_EXPR] && valid_symbols[RAW_TEXT_AWAIT]) {
     bool b = scan_raw_text_expr(scanner, lexer, RAW_TEXT_AWAIT);
@@ -424,10 +389,7 @@ bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
   return false;
 }
 
-void deleter(void *tag, za_Allocator *A) {
-  /* if (tag != NULL) */
-  /*   za_Free(A, tag); */
-}
+void deleter(void *tag, za_Allocator *A) {}
 void *tree_sitter_svelte_external_scanner_create() {
   za_Allocator *A = za_New();
   Scanner *scanner = (Scanner *)za_Alloc(A, sizeof(Scanner));
@@ -454,6 +416,5 @@ void tree_sitter_svelte_external_scanner_deserialize(void *payload,
 }
 
 void tree_sitter_svelte_external_scanner_destroy(void *payload) {
-  printf("destroyed\n");
   za_Release(((Scanner *)payload)->A);
 }
