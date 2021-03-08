@@ -1,5 +1,6 @@
 #include "tree_sitter/parser.h"
 #include "utils.h"
+/* #include "utils_def.h" */
 #include <wctype.h>
 
 typedef enum TokenType {
