@@ -336,9 +336,10 @@ typedef struct vc_vector {
   za_Allocator *A;
 } vc_vector;
 // Constructs an empty vector with an reserver size for count_elements.
-vc_vector *vc_vector_create(za_Allocator *A, size_t count_elements,
-                            size_t size_of_element,
-                            vc_vector_deleter *deleter) {
+static inline vc_vector *vc_vector_create(za_Allocator *A,
+                                          size_t count_elements,
+                                          size_t size_of_element,
+                                          vc_vector_deleter *deleter) {
   vc_vector *v = (vc_vector *)za_Alloc(A, sizeof(vc_vector));
 
   if (count_elements < MINIMUM_COUNT_OF_ELEMENTS) {
@@ -357,26 +358,28 @@ vc_vector *vc_vector_create(za_Allocator *A, size_t count_elements,
   return v;
 }
 
-void *vc_vector_at(vc_vector *vector, size_t index) {
+static inline void *vc_vector_at(vc_vector *vector, size_t index) {
   return vector->data + index * vector->element_size;
 }
 
-size_t vc_vector_count(const vc_vector *vector) { return vector->count; }
+static inline size_t vc_vector_count(const vc_vector *vector) {
+  return vector->count;
+}
 
 // [first_index, last_index)
-void vc_vector_call_deleter(vc_vector *vector, size_t first_index,
-                            size_t last_index) {
+static inline void vc_vector_call_deleter(vc_vector *vector, size_t first_index,
+                                          size_t last_index) {
   for (size_t i = first_index; i < last_index; ++i) {
     vector->deleter(vc_vector_at(vector, i), vector->A);
   }
 }
 
 // delete all data
-void vc_vector_call_deleter_all(vc_vector *vector) {
+static inline void vc_vector_call_deleter_all(vc_vector *vector) {
   vc_vector_call_deleter(vector, 0, vc_vector_count(vector));
 }
 // clear all data
-void vc_vector_clear(vc_vector *vector) {
+static inline void vc_vector_clear(vc_vector *vector) {
   if (vector->deleter != NULL) {
     vc_vector_call_deleter_all(vector);
   }
@@ -385,11 +388,11 @@ void vc_vector_clear(vc_vector *vector) {
 }
 
 // Returns the last item in the vector.
-void *vc_vector_back(vc_vector *vector) {
+static inline void *vc_vector_back(vc_vector *vector) {
   return vector->data + (vector->count - 1) * vector->element_size;
 }
 
-bool vc_vector_realloc(vc_vector *vector, size_t new_count) {
+static inline bool vc_vector_realloc(vc_vector *vector, size_t new_count) {
   const size_t new_size = new_count * vector->element_size;
   char *new_data = (char *)za_ReAlloc(vector->A, vector->data, new_size);
   if (!new_data) {
@@ -401,7 +404,8 @@ bool vc_vector_realloc(vc_vector *vector, size_t new_count) {
   return true;
 }
 
-bool vc_vector_resize(vc_vector *vector, size_t new_count, void *defaultValue) {
+static inline bool vc_vector_resize(vc_vector *vector, size_t new_count,
+                                    void *defaultValue) {
   // trim or append elements, provide strong guarantee
   const size_t old_count = vector->count;
 
@@ -428,11 +432,12 @@ bool vc_vector_resize(vc_vector *vector, size_t new_count, void *defaultValue) {
   return true;
 }
 
-size_t vc_vector_max_count(const vc_vector *vector) {
+static inline size_t vc_vector_max_count(const vc_vector *vector) {
   return vector->reserved_size / vector->element_size;
 }
 
-bool vc_vector_append(vc_vector *vector, const void *values, size_t count) {
+static inline bool vc_vector_append(vc_vector *vector, const void *values,
+                                    size_t count) {
   /* #define GROWTH_FACTOR 1.5 */
   const size_t count_new = count + vc_vector_count(vector);
 
@@ -456,14 +461,14 @@ bool vc_vector_append(vc_vector *vector, const void *values, size_t count) {
   return true;
 }
 
-bool vc_vector_push_back(vc_vector *vector, const void *value) {
+static inline bool vc_vector_push_back(vc_vector *vector, const void *value) {
   if (!vc_vector_append(vector, value, 1)) {
     return false;
   }
   return true;
 }
 
-bool vc_vector_pop_back(vc_vector *vector) {
+static inline bool vc_vector_pop_back(vc_vector *vector) {
   if (vector->deleter != NULL) {
     vector->deleter(vc_vector_back(vector), vector->A);
   }
@@ -481,25 +486,26 @@ typedef struct {
 } ekstring;
 
 #define NaS(x) ((ekstring){NULL, 0, (x)})
-const ekstring init_string_str(za_Allocator *A, const char *buf,
-                               size_t length) {
+static inline const ekstring init_string_str(za_Allocator *A, const char *buf,
+                                             size_t length) {
   char *s = (char *)za_Alloc(A, sizeof(char) * (length + 1));
   strncpy(s, buf, length);
   s[length] = '\0';
   return (const ekstring){s, length, A};
 }
-const ekstring init_string_string(const ekstring str) {
+static inline const ekstring init_string_string(const ekstring str) {
   za_Allocator *A = str.A;
   char *s = (char *)za_Alloc(A, (str.length + 1) * sizeof(char));
   strncpy(s, str.buf, str.length + 1);
   return (const ekstring){s, str.length, A};
 }
-bool compare_string_string(const ekstring s1, const ekstring s2) {
+static inline bool compare_string_string(const ekstring s1, const ekstring s2) {
   if (s1.length == s2.length)
     return strncmp(s1.buf, s2.buf, s1.length) == 0;
   return false;
 }
-const ekstring concat_string_string(const ekstring s1, const ekstring s2) {
+static inline const ekstring concat_string_string(const ekstring s1,
+                                                  const ekstring s2) {
   const size_t length = s1.length + s2.length + 1;
   char *s = (char *)za_Alloc(s1.A, length);
   strncpy(s, s1.buf, s1.length);
@@ -507,7 +513,8 @@ const ekstring concat_string_string(const ekstring s1, const ekstring s2) {
   s[length] = '\0';
   return (const ekstring){s, length - 1, s1.A};
 }
-const ekstring concat_string_char(const ekstring s1, const char c) {
+static inline const ekstring concat_string_char(const ekstring s1,
+                                                const char c) {
   if (s1.buf == NULL) {
     char *s = (char *)za_Alloc(s1.A, 2);
     s[0] = c;
@@ -521,9 +528,11 @@ const ekstring concat_string_char(const ekstring s1, const char c) {
   s[length - 1] = '\0';
   return (const ekstring){s, length - 1, s1.A};
 }
-const int parse_int(const ekstring s1) { return atoi(s1.buf); }
-const char *get_string_cstring(const ekstring s) { return s.buf; }
-void destroy_string(const ekstring s) { za_Free(s.A, (void *)s.buf); }
+static inline const int parse_int(const ekstring s1) { return atoi(s1.buf); }
+static inline const char *get_string_cstring(const ekstring s) { return s.buf; }
+static inline void destroy_string(const ekstring s) {
+  za_Free(s.A, (void *)s.buf);
+}
 // -----------------------------------------------------------
 
 // ------------------------ Tag ------------------------------
@@ -671,20 +680,21 @@ static const TagType TAG_TYPES_NOT_ALLOWED_IN_PARAGRAPHS[] = {
 static const unsigned int TTNAIP_LEN =
     sizeof(TAG_TYPES_NOT_ALLOWED_IN_PARAGRAPHS) / sizeof(TagType);
 
-Tag *initTag(za_Allocator *A) {
+static inline Tag *initTag(za_Allocator *A) {
   Tag *t = (Tag *)za_Alloc(A, sizeof(Tag));
   t->type = END_OF_VOID_TAGS;
   t->custom_tag_name = NaS(A);
   return t;
 }
-Tag *initTagArgs(za_Allocator *A, TagType type, const ekstring name) {
+static inline Tag *initTagArgs(za_Allocator *A, TagType type,
+                               const ekstring name) {
   Tag *t = (Tag *)za_Alloc(A, sizeof(Tag));
   t->type = type;
   t->custom_tag_name = init_string_string(name);
   return t;
 }
 
-bool compareTags(const Tag *a, const Tag *b) {
+static inline bool compareTags(const Tag *a, const Tag *b) {
   if (a == NULL || b == NULL) {
     if (a == NULL && b == NULL)
       return true;
@@ -698,23 +708,25 @@ bool compareTags(const Tag *a, const Tag *b) {
   return true;
 }
 
-inline const bool is_void(Tag *tag) { return tag->type < END_OF_VOID_TAGS; }
+static inline const bool is_void(Tag *tag) {
+  return tag->type < END_OF_VOID_TAGS;
+}
 
-const bool findTagType(const TagType *tt, TagType toFind) {
+static inline const bool findTagType(const TagType *tt, TagType toFind) {
   for (int i = 0; i < TTNAIP_LEN; i++)
     if (tt[i] == toFind)
       return true;
   return false;
 }
 
-const bool findTag(vc_vector *v, Tag *tag) {
+static inline const bool findTag(vc_vector *v, Tag *tag) {
   for (int i = 0; i < v->count; i++)
     if (compareTags(vc_vector_at(v, i), tag))
       return true;
   return false;
 }
 
-inline bool can_contain(const Tag *parent, const Tag *tag) {
+static inline bool can_contain(const Tag *parent, const Tag *tag) {
   TagType child = tag->type;
 
   switch (parent->type) {
@@ -768,8 +780,8 @@ struct hashmap_s {
 extern "C" {
 #endif
 
-int hashmap_create(za_Allocator *A, const unsigned initial_size,
-                   struct hashmap_s *const out_hashmap) {
+static inline int hashmap_create(za_Allocator *A, const unsigned initial_size,
+                                 struct hashmap_s *const out_hashmap) {
   out_hashmap->table_size = initial_size;
   out_hashmap->size = 0;
 
@@ -787,7 +799,8 @@ int hashmap_create(za_Allocator *A, const unsigned initial_size,
   return 0;
 }
 
-unsigned hashmap_crc32_helper(const char *const s, const unsigned len) {
+static inline unsigned hashmap_crc32_helper(const char *const s,
+                                            const unsigned len) {
   unsigned i;
   unsigned crc32val = 0;
 
@@ -862,9 +875,10 @@ unsigned hashmap_crc32_helper(const char *const s, const unsigned len) {
 #endif
 }
 
-unsigned hashmap_hash_helper_int_helper(const struct hashmap_s *const m,
-                                        const char *const keystring,
-                                        const unsigned len) {
+static inline unsigned
+hashmap_hash_helper_int_helper(const struct hashmap_s *const m,
+                               const char *const keystring,
+                               const unsigned len) {
   unsigned key = hashmap_crc32_helper(keystring, len);
 
   /* Robert Jenkins' 32 bit Mix Function */
@@ -882,14 +896,16 @@ unsigned hashmap_hash_helper_int_helper(const struct hashmap_s *const m,
 
   return key % m->table_size;
 }
-int hashmap_match_helper(const struct hashmap_element_s *const element,
-                         const char *const key, const unsigned len) {
+static inline int
+hashmap_match_helper(const struct hashmap_element_s *const element,
+                     const char *const key, const unsigned len) {
   return (element->key_len == len) && (0 == memcmp(element->key, key, len));
 }
 
-int hashmap_hash_helper(za_Allocator *A, const struct hashmap_s *const m,
-                        const char *const key, const unsigned len,
-                        unsigned *const out_index) {
+static inline int hashmap_hash_helper(za_Allocator *A,
+                                      const struct hashmap_s *const m,
+                                      const char *const key, const unsigned len,
+                                      unsigned *const out_index) {
   unsigned int start, curr;
   unsigned int i;
   int total_in_use;
@@ -936,10 +952,10 @@ int hashmap_hash_helper(za_Allocator *A, const struct hashmap_s *const m,
   return 0;
 }
 
-int hashmap_iterate_pairs(za_Allocator *A, struct hashmap_s *const hashmap,
-                          int (*f)(za_Allocator *, void *const,
-                                   struct hashmap_element_s *const),
-                          void *const context) {
+static inline int hashmap_iterate_pairs(
+    za_Allocator *A, struct hashmap_s *const hashmap,
+    int (*f)(za_Allocator *, void *const, struct hashmap_element_s *const),
+    void *const context) {
   unsigned int i;
   struct hashmap_element_s *p;
   int r;
@@ -964,16 +980,17 @@ int hashmap_iterate_pairs(za_Allocator *A, struct hashmap_s *const hashmap,
   return 0;
 }
 
-void hashmap_destroy(za_Allocator *A, struct hashmap_s *const m) {
+static inline void hashmap_destroy(za_Allocator *A, struct hashmap_s *const m) {
   /* za_Free(A, m->data); */
   /* memset(m, 0, sizeof(struct hashmap_s)); */
 }
 
-int hashmap_put(za_Allocator *A, struct hashmap_s *const m,
-                const char *const key, const unsigned len, TagType value);
+static inline int hashmap_put(za_Allocator *A, struct hashmap_s *const m,
+                              const char *const key, const unsigned len,
+                              TagType value);
 
-int hashmap_rehash_iterator(za_Allocator *A, void *const new_hash,
-                            struct hashmap_element_s *const e) {
+static inline int hashmap_rehash_iterator(za_Allocator *A, void *const new_hash,
+                                          struct hashmap_element_s *const e) {
   int temp = hashmap_put(A, HASHMAP_PTR_CAST(struct hashmap_s *, new_hash),
                          e->key, e->key_len, e->data);
   if (0 < temp) {
@@ -984,7 +1001,8 @@ int hashmap_rehash_iterator(za_Allocator *A, void *const new_hash,
 }
 
 // Doubles the size of the hashmap, and rehashes all the elements
-int hashmap_rehash_helper(za_Allocator *A, struct hashmap_s *const m) {
+static inline int hashmap_rehash_helper(za_Allocator *A,
+                                        struct hashmap_s *const m) {
   /* If this multiplication overflows hashmap_create will fail. */
   unsigned new_size = 2 * m->table_size;
 
@@ -1011,8 +1029,9 @@ int hashmap_rehash_helper(za_Allocator *A, struct hashmap_s *const m) {
   return 0;
 }
 
-int hashmap_put(za_Allocator *A, struct hashmap_s *const m,
-                const char *const key, const unsigned len, TagType value) {
+static inline int hashmap_put(za_Allocator *A, struct hashmap_s *const m,
+                              const char *const key, const unsigned len,
+                              TagType value) {
   unsigned int index;
 
   /* Find a place to put our value. */
@@ -1037,8 +1056,8 @@ int hashmap_put(za_Allocator *A, struct hashmap_s *const m,
   return 0;
 }
 
-TagType hashmap_get(const struct hashmap_s *const m, const char *const key,
-                    const unsigned len) {
+static inline TagType hashmap_get(const struct hashmap_s *const m,
+                                  const char *const key, const unsigned len) {
   unsigned int curr;
   unsigned int i;
 
@@ -1060,7 +1079,8 @@ TagType hashmap_get(const struct hashmap_s *const m, const char *const key,
 }
 
 // for a name
-Tag *for_name(za_Allocator *A, struct hashmap_s *m, const ekstring *name) {
+static inline Tag *for_name(za_Allocator *A, struct hashmap_s *m,
+                            const ekstring *name) {
   TagType type = hashmap_get(m, name->buf, name->length);
   if (type != 0) {
     Tag *t = (Tag *)za_Alloc(A, sizeof(Tag));
@@ -1073,7 +1093,7 @@ Tag *for_name(za_Allocator *A, struct hashmap_s *m, const ekstring *name) {
 }
 
 // init tags-hashmap
-static const struct hashmap_s *get_tag_map(za_Allocator *AA) {
+static inline const struct hashmap_s *get_tag_map(za_Allocator *AA) {
   struct hashmap_s *data =
       (struct hashmap_s *)za_Alloc(AA, sizeof(struct hashmap_s));
   int res = hashmap_create(AA, 128, data);
