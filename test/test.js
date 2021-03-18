@@ -1,8 +1,7 @@
 const Parser = require('tree-sitter')
 const HTML = require('tree-sitter-html')
 
-const Svelte = require("../index")
-
+const Svelte = require("../bindings/node/index.js")
 
 const parser = new Parser()
 parser.setLanguage(Svelte)

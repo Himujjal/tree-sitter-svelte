@@ -531,7 +531,7 @@ static inline const ekstring concat_string_char(const ekstring s1,
 static inline const int parse_int(const ekstring s1) { return atoi(s1.buf); }
 static inline const char *get_string_cstring(const ekstring s) { return s.buf; }
 static inline void destroy_string(const ekstring s) {
-  za_Free(s.A, (void *)s.buf);
+  // za_Free(s.A, (void *)s.buf);
 }
 // -----------------------------------------------------------
 
@@ -981,8 +981,8 @@ static inline int hashmap_iterate_pairs(
 }
 
 static inline void hashmap_destroy(za_Allocator *A, struct hashmap_s *const m) {
-  /* za_Free(A, m->data); */
-  /* memset(m, 0, sizeof(struct hashmap_s)); */
+  za_Free(A, m->data); 
+  memset(m, 0, sizeof(struct hashmap_s));
 }
 
 static inline int hashmap_put(za_Allocator *A, struct hashmap_s *const m,
@@ -1033,6 +1033,7 @@ static inline int hashmap_put(za_Allocator *A, struct hashmap_s *const m,
                               const char *const key, const unsigned len,
                               TagType value) {
   unsigned int index;
+  printf("%s, %d\n", key, value);
 
   /* Find a place to put our value. */
   while (!hashmap_hash_helper(A, m, key, len, &index)) {
@@ -1096,7 +1097,7 @@ static inline Tag *for_name(za_Allocator *A, struct hashmap_s *m,
 static inline const struct hashmap_s *get_tag_map(za_Allocator *AA) {
   struct hashmap_s *data =
       (struct hashmap_s *)za_Alloc(AA, sizeof(struct hashmap_s));
-  int res = hashmap_create(AA, 128, data);
+  int res = hashmap_create(AA, 256, data);
   if (res == 0) {
 #define TAG(name) hashmap_put(AA, data, (#name), strlen(#name), name)
     TAG(AREA);
@@ -1224,6 +1225,7 @@ static inline const struct hashmap_s *get_tag_map(za_Allocator *AA) {
     TAG(UL);
     TAG(VAR);
     TAG(VIDEO);
+    TAG(CUSTOM);
 #undef TAG
   }
   return data;

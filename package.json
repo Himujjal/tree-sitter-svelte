@@ -2,7 +2,7 @@
   "name": "tree-sitter-svelte",
   "version": "0.7.0",
   "description": "Tree-sitter-grammar for svelte",
-  "main": "index.js",
+  "main": "bindings/node",
   "scripts": {
     "test": "tree-sitter test",
     "gen": "tree-sitter generate",
@@ -17,7 +17,11 @@
     "type": "git",
     "url": "git+https://github.com/Himujjal/tree-sitter-svelte.git"
   },
-  "keywords": ["tree-sitter", "svelte", "grammar"],
+  "keywords": [
+    "tree-sitter",
+    "svelte",
+    "grammar"
+  ],
   "author": "Himujjal <himu@tuta.io>",
   "license": "MIT",
   "bugs": {
@@ -37,7 +41,9 @@
   "tree-sitter": [
     {
       "scope": "text.svelte.basic",
-      "file-types": ["svelte"],
+      "file-types": [
+        "svelte"
+      ],
       "injection-regex": "svelte"
     }
   ]
