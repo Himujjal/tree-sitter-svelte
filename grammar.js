@@ -31,6 +31,7 @@ module.exports = grammar({
         $._text,
         $.element,
         $.if_statement,
+        $.key_statement,
         $.each_statement,
         $.await_statement
       ),
@@ -233,5 +234,22 @@ module.exports = grammar({
       ),
     await_end_expr: ($) =>
       seq("{", "/", alias("await", $.special_block_keyword), "}"),
+
+
+    // ----------------- Key statement ----------------------
+    key_statement: ($) =>
+      seq($.key_start_expr, repeat($._node), $.key_end_expr),
+
+    key_start_expr: ($) =>
+      seq(
+        "{",
+        "#",
+        alias("key", $.special_block_keyword),
+        choice($.raw_text_expr),
+        "}"
+      ),
+
+    key_end_expr: ($) =>
+      seq("{", "/", alias("key", $.special_block_keyword), "}"),
   },
 });
