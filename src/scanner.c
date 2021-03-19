@@ -1,7 +1,11 @@
 #include "tree_sitter/parser.h"
-#include "utils.h"
-/* #include "utils_def.h" */
 #include <wctype.h>
+
+#include "allocator.h"
+#include "ekstring.h"
+#include "tag.h"
+#include "uthash.h"
+#include "vc_vector.h"
 
 typedef enum TokenType {
   START_TAG_NAME,
@@ -136,7 +140,8 @@ bool scan_raw_text(Scanner *scanner, TSLexer *lexer) {
   unsigned delimiter_index = 0;
 
   while (lexer->lookahead) {
-    if (towupper(lexer->lookahead) == end_delimiter.buf[delimiter_index]) {
+    if ((char)towupper(lexer->lookahead) ==
+        end_delimiter.buf[delimiter_index]) {
       delimiter_index++;
       if (delimiter_index == end_delimiter.length)
         break;

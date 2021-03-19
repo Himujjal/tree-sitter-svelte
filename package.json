@@ -6,7 +6,7 @@
   "scripts": {
     "test": "tree-sitter test",
     "gen": "tree-sitter generate",
-    "build": "tree-sitter generate && tree-sitter test && node-gyp configure && node-gyp build",
+    "build": "tree-sitter generate && node-gyp configure && node-gyp build",
     "gentsdef": "node ./script/generateTSDefinition.js",
     "start": "nodemon",
     "publish": "np --no-tests --no-2fa --no-yarn",

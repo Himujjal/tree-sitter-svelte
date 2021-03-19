@@ -1,5 +1,5 @@
 const Parser = require('tree-sitter')
-const HTML = require('tree-sitter-html')
+// const HTML = require('tree-sitter-html')
 
 const Svelte = require("../bindings/node/index.js")
 

@@ -9,6 +9,7 @@
 
   export async function preload(page, session) {
     const site = await loadSite(getSiteId(), session.token);
+    let value = "hello";
     let slug = null;
     let parentSlug = null;
     let parentDoc = null;
@@ -81,6 +82,10 @@
       ].filter(String).join(" | ")
     }
   </title>
+
+  <div>
+    Hello World
+  </div>
 
   {#if doc.attributes.content.seoDescription}
     <meta name="description" content={doc.attributes.content.seoDescription} />

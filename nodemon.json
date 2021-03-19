@@ -9,5 +9,5 @@
     "test/corpus/*.txt"
   ],
   "ext": "txt,js,c,hh,h",
-  "exec": "tree-sitter generate && tree-sitter test"
+  "exec": "pnpm build && pnpm test && && node test/test.js"
 }
