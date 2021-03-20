@@ -9,7 +9,7 @@
     "build": "tree-sitter generate && node-gyp configure && node-gyp build",
     "gentsdef": "node ./script/generateTSDefinition.js",
     "start": "nodemon",
-    "publish": "np --no-tests --no-2fa --no-yarn",
+    "publish-package": "np --no-tests --no-2fa --no-yarn",
     "wasm": "tree-sitter build-wasm",
     "ui": "tree-sitter build-wasm && tree-sitter web-ui"
   },
