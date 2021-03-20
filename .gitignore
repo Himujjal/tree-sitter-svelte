@@ -23,3 +23,8 @@ log.txt
 
 #/target
 Cargo.lock
+
+# all .o, .a, and .so files
+*.o
+*.a
+*.so
