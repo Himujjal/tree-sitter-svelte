@@ -224,3 +224,26 @@ script-tag-inside-svelte:head
     (text)
     (end_tag
       (tag_name))))
+
+========================
+key statement
+========================
+{#key foo}
+  <div>bar</div>
+{/key}
+---
+(document
+  (key_statement
+    (key_start_expr
+      (special_block_keyword)
+      (raw_text_expr))
+    (text)
+    (element
+      (start_tag
+        (tag_name))
+      (text)
+      (end_tag
+        (tag_name)))
+    (text)
+    (key_end_expr
+      (special_block_keyword))))
