@@ -618,6 +618,22 @@ static uint16_t ts_non_terminal_alias_map[] = {
   0,
 };
 
+static inline bool aux_sym_attribute_name_token1_character_set_1(int32_t c) {
+  return (c < '\''
+    ? (c < '\r'
+      ? (c < '\t'
+        ? c == 0
+        : c <= '\n')
+      : (c <= '\r' || (c < '"'
+        ? c == ' '
+        : c <= '"')))
+    : (c <= '\'' || (c < '{'
+      ? (c < '<'
+        ? c == '/'
+        : c <= '>')
+      : (c <= '{' || c == '}'))));
+}
+
 static bool ts_lex(TSLexer *lexer, TSStateId state) {
   START_LEXER();
   eof = lexer->eof(lexer);
@@ -792,17 +808,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       END_STATE();
     case 35:
       ACCEPT_TOKEN(aux_sym_attribute_name_token1);
-      if (lookahead != 0 &&
-          lookahead != '\t' &&
-          lookahead != '\n' &&
-          lookahead != '\r' &&
-          lookahead != ' ' &&
-          lookahead != '"' &&
-          lookahead != '\'' &&
-          lookahead != '/' &&
-          (lookahead < '<' || '>' < lookahead) &&
-          lookahead != '{' &&
-          lookahead != '}') ADVANCE(35);
+      if (!aux_sym_attribute_name_token1_character_set_1(lookahead)) ADVANCE(35);
       END_STATE();
     case 36:
       ACCEPT_TOKEN(anon_sym_SQUOTE);
