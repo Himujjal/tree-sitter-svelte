@@ -1,0 +1,4 @@
+pkgs:
+  tree_sitter_svelte:
+    version: 0.8.1
+    root: bindings/zig/parser.zig

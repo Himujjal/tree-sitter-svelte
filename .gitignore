@@ -8,7 +8,10 @@ pnpm-lock.yaml
 build
 log.txt
 
-
+# zig stuff
+zig-cache
+.gyro
+gyro.lock
 
 
 

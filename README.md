@@ -53,13 +53,14 @@ console.log(tree.rootNode.toString());
 
 ```
 
-# TODO
+# Languages supported:
 
-- [ ] Move all C++ functions to C
-    - [ ] TagVector
-    - [ ] Tag
-    - [ ] cstring
-    - [ ] zzzAllocator
+- [x] JavaScript/TypeScript
+- [x] Rust
+- [ ] Go
+- [x] Zig
+- [ ] Nim
+- [ ] Python
 
 # LICENSE
 
