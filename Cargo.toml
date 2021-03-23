@@ -7,6 +7,8 @@ keywords = ["incremental", "parsing", "svelte"]
 categories = ["parsing", "text-editors", "tree-sitter"]
 repository = "https://github.com/Himujjal/tree-sitter-svelte"
 edition = "2018"
+description = "Tree sitter grammar for Svelte"
+license = "MIT"
 
 build = "bindings/rust/build.rs"
 include = [
