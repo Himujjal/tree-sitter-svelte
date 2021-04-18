@@ -247,3 +247,41 @@ key statement
     (text)
     (key_end_expr
       (special_block_keyword))))
+
+=====================
+testing
+=====================
+<Div>
+  <span>bar</span>
+</Div>
+
+<Input>
+  <span>bar</span>
+</Input>
+---------------------
+(document
+  (element
+    (start_tag (tag_name))
+    (text)
+    (element
+      (start_tag (tag_name))
+      (text)
+      (end_tag (tag_name)) 
+    )
+    (text)
+    (end_tag (tag_name))
+  )
+  (text)
+  (element
+    (start_tag (tag_name))
+    (text)
+    (element
+      (start_tag (tag_name))
+      (text)
+      (end_tag (tag_name)) 
+    )
+    (text)
+    (end_tag (tag_name))
+  )
+)
+

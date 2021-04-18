@@ -138,7 +138,7 @@ Raw text elements
 </style>
 
 <script>
-</SCRIPT>
+</script>
 ---
 
 (document
