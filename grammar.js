@@ -8,7 +8,7 @@ module.exports = grammar({
     $._script_start_tag_name,
     $._style_start_tag_name,
     $._end_tag_name,
-    $.errorneous_end_tag_name,
+    $.erroneous_end_tag_name,
     "/>",
     $._implicit_end_tag,
     $.raw_text,
@@ -54,7 +54,7 @@ module.exports = grammar({
 
     end_tag: ($) => seq("</", alias($._end_tag_name, $.tag_name), ">"),
 
-    errorneous_end_tag: ($) => seq("</", $.errorneous_end_tag_name, ">"),
+    erroneous_end_tag: ($) => seq("</", $.erroneous_end_tag_name, ">"),
 
     // -------- script and style element ---------
     script_element: ($) =>

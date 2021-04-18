@@ -176,7 +176,7 @@
         }
       ]
     },
-    "errorneous_end_tag": {
+    "erroneous_end_tag": {
       "type": "SEQ",
       "members": [
         {
@@ -185,7 +185,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "errorneous_end_tag_name"
+          "name": "erroneous_end_tag_name"
         },
         {
           "type": "STRING",
@@ -1212,7 +1212,7 @@
     },
     {
       "type": "SYMBOL",
-      "name": "errorneous_end_tag_name"
+      "name": "erroneous_end_tag_name"
     },
     {
       "type": "STRING",
