@@ -30,7 +30,7 @@
 
 (tag_name) @tag
 (attribute_name) @property
-(errorneous_end_tag_name) @error
+(erroneous_end_tag_name) @error
 (comment) @comment
 
 [
