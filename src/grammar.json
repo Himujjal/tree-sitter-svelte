@@ -770,8 +770,17 @@
           }
         },
         {
-          "type": "SYMBOL",
-          "name": "each_end_expr"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "else_each_statement"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "each_end_expr"
+            }
+          ]
         }
       ]
     },
@@ -829,6 +838,26 @@
         {
           "type": "STRING",
           "value": "}"
+        }
+      ]
+    },
+    "else_each_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "else_expr"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_node"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "each_end_expr"
         }
       ]
     },

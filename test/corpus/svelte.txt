@@ -58,6 +58,12 @@ logical_blocks
     <li></li>
 {/each}
 
+{#each cats as cat (hello)}
+  <div>Hello</div>
+{:else}
+  <li>Hello</li>  
+{/each}
+
 { thenRandomExpr }
 { @html '<p>hello world</p>'}
 {{}}
@@ -95,7 +101,22 @@ logical_blocks
         (each_start_expr (special_block_keyword) (raw_text_each) (as) (raw_text_expr)) (text)
         (element (start_tag (tag_name)) (end_tag (tag_name))) (text)
         (each_end_expr (special_block_keyword))
-    ) (text)
+    )
+    (text)
+    (each_statement
+        (each_start_expr (special_block_keyword) (raw_text_each) (as) (raw_text_expr))
+        (text)
+        (element (start_tag (tag_name)) (text) (end_tag (tag_name)))
+        (text)
+        (else_each_statement
+          (else_expr (special_block_keyword))
+          (text)
+          (element (start_tag (tag_name)) (text) (end_tag (tag_name)))
+          (text)
+          (each_end_expr (special_block_keyword))
+        )
+    )
+    (text)
     (expression (raw_text_expr)) (text)
     (html_expr (special_block_keyword) (raw_text_expr)) (text)
     (expression (raw_text_expr))
