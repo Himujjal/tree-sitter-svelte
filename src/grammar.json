@@ -452,7 +452,7 @@
           "type": "ALIAS",
           "content": {
             "type": "PATTERN",
-            "value": "[^<>{}]+"
+            "value": "[^<>\\s]([^<>]*[^<>\\s])?"
           },
           "named": true,
           "value": "text"
