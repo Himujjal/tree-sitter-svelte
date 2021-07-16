@@ -114,7 +114,7 @@ module.exports = grammar({
         seq('"', optional(alias(/[^"]+/, $.attribute_value)), '"')
       ),
 
-    _text: ($) => choice(alias(/[^<>\s]([^<>]*[^<>\s])?/, $.text), $._expression),
+    _text: ($) => choice(alias(/[^<>{}\s]([^<>{}]*[^<>{}\s])?/, $.text), $._expression),
 
     _expression: ($) =>
       choice($.expression, $.html_expr, alias("{}", $.expression)),
