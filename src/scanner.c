@@ -280,7 +280,7 @@ bool scan_raw_text_expr(Scanner *scanner, TSLexer *lexer,
     }
     case '\n':
     case '\t':
-    case ')':
+    // case ')':
     case ' ': {
       if (extraToken == RAW_TEXT_AWAIT || extraToken == RAW_TEXT_EACH) {
         lexer->mark_end(lexer);

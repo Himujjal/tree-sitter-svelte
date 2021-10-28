@@ -13,7 +13,6 @@ Raw Text Expression
             (attribute (attribute_name) (quoted_attribute_value (attribute_value))))
         (raw_text)
         (end_tag (tag_name)))
-    (text)
     (element
         (start_tag (tag_name))
         (text)
@@ -53,6 +52,7 @@ logical_blocks
     <li></li>
 {:else}
 {/if}
+
 {hello}
 {#each cats as cat}
     <li></li>
@@ -62,6 +62,9 @@ logical_blocks
   <div>Hello</div>
 {:else}
   <li>Hello</li>  
+{/each}
+
+{#each user.codes.filter(codeNotBlocked) as someItem (someItem.id)}
 {/each}
 
 { thenRandomExpr }
@@ -84,41 +87,38 @@ logical_blocks
             (text)
             (end_tag (tag_name))
         )
-        (text)
         (else_if_statement
-            (else_if_expr (special_block_keyword) (special_block_keyword) (raw_text_expr)) (text)
+            (else_if_expr (special_block_keyword) (special_block_keyword) (raw_text_expr))
             (element
                 (start_tag (tag_name))
                 (end_tag (tag_name))
-            ) (text)
-            (else_statement (else_expr (special_block_keyword)) (text)
+            )
+            (else_statement (else_expr (special_block_keyword))
                 (if_end_expr (special_block_keyword))
             )
         )
-    ) (text)
-    (expression (raw_text_expr)) (text)
-    (each_statement
-        (each_start_expr (special_block_keyword) (raw_text_each) (as) (raw_text_expr)) (text)
-        (element (start_tag (tag_name)) (end_tag (tag_name))) (text)
-        (each_end_expr (special_block_keyword))
     )
-    (text)
+    (expression (raw_text_expr))
     (each_statement
         (each_start_expr (special_block_keyword) (raw_text_each) (as) (raw_text_expr))
-        (text)
+        (element (start_tag (tag_name)) (end_tag (tag_name)))
+        (each_end_expr (special_block_keyword))
+    )
+    (each_statement
+        (each_start_expr (special_block_keyword) (raw_text_each) (as) (raw_text_expr))
         (element (start_tag (tag_name)) (text) (end_tag (tag_name)))
-        (text)
         (else_each_statement
           (else_expr (special_block_keyword))
-          (text)
           (element (start_tag (tag_name)) (text) (end_tag (tag_name)))
-          (text)
           (each_end_expr (special_block_keyword))
         )
     )
-    (text)
-    (expression (raw_text_expr)) (text)
-    (html_expr (special_block_keyword) (raw_text_expr)) (text)
+    (each_statement
+        (each_start_expr (special_block_keyword) (raw_text_each) (as) (raw_text_expr))
+        (each_end_expr (special_block_keyword))
+    )
+    (expression (raw_text_expr))
+    (html_expr (special_block_keyword) (raw_text_expr))
     (expression (raw_text_expr))
 )
 
@@ -138,21 +138,20 @@ await
 ------
 (document
     (await_statement
-        (await_start_expr (special_block_keyword) (raw_text_expr)) (text)
-        (then_statement (then_expr (special_block_keyword) (raw_text_expr)) (text)
-            (catch_statement (catch_expr (special_block_keyword) (raw_text_expr)) (text)
+        (await_start_expr (special_block_keyword) (raw_text_expr))
+        (then_statement (then_expr (special_block_keyword) (raw_text_expr))
+            (catch_statement (catch_expr (special_block_keyword) (raw_text_expr))
                 (await_end_expr (special_block_keyword))
             )
         )
     )
-    (text)
     (await_statement
-        (await_start_expr (special_block_keyword) (raw_text_await) (then) (raw_text_expr)) (text)
-        (element (start_tag (tag_name)) (end_tag (tag_name))) (text)
+        (await_start_expr (special_block_keyword) (raw_text_await) (then) (raw_text_expr))
+        (element (start_tag (tag_name)) (end_tag (tag_name)))
         (await_end_expr (special_block_keyword))
-    ) (text)
+    )
     (await_statement
-        (await_start_expr (special_block_keyword) (raw_text_expr)) (text)
+        (await_start_expr (special_block_keyword) (raw_text_expr))
         (await_end_expr (special_block_keyword))
     )
 )
@@ -168,17 +167,14 @@ Special elements
 (document
     (element
         (start_tag (tag_name))
-        (text)
         (element
             (self_closing_tag (tag_name)
                 (attribute (attribute_name) (quoted_attribute_value (attribute_value)))
                 (attribute (attribute_name) (quoted_attribute_value (attribute_value)))
             )
         )
-        (text)
         (end_tag (tag_name))
     )
-    (text)
     (element
         (self_closing_tag (tag_name)
             (attribute (attribute_name)
@@ -216,7 +212,7 @@ if-else-nested
                     (if_end_expr (special_block_keyword))
                     )
                 )
-            ) (text)
+            )
             (else_statement (else_expr (special_block_keyword)) (text)
                 (if_end_expr (special_block_keyword))
             )
@@ -235,14 +231,12 @@ script-tag-inside-svelte:head
   (element
     (start_tag
       (tag_name))
-    (text)
     (script_element
       (start_tag
         (tag_name))
       (raw_text)
       (end_tag
         (tag_name)))
-    (text)
     (end_tag
       (tag_name))))
 
@@ -258,14 +252,12 @@ key statement
     (key_start_expr
       (special_block_keyword)
       (raw_text_expr))
-    (text)
     (element
       (start_tag
         (tag_name))
       (text)
       (end_tag
         (tag_name)))
-    (text)
     (key_end_expr
       (special_block_keyword))))
 
@@ -283,25 +275,20 @@ testing
 (document
   (element
     (start_tag (tag_name))
-    (text)
     (element
       (start_tag (tag_name))
       (text)
       (end_tag (tag_name)) 
     )
-    (text)
     (end_tag (tag_name))
   )
-  (text)
   (element
     (start_tag (tag_name))
-    (text)
     (element
       (start_tag (tag_name))
       (text)
       (end_tag (tag_name)) 
     )
-    (text)
     (end_tag (tag_name))
   )
 )

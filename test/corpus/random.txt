@@ -98,17 +98,12 @@ Some error finding bug
     (raw_text)
     (end_tag (tag_name))
   )
-  (text)
   (script_element (start_tag (tag_name)) (raw_text) (end_tag (tag_name)))
-  (text)
   (element
     (start_tag (tag_name))
-    (text)
-    (element (start_tag (tag_name)) (text) (expression (raw_text_expr)) (text) (end_tag (tag_name)))
-    (text)
+    (element (start_tag (tag_name)) (expression (raw_text_expr))  (end_tag (tag_name)))
     (if_statement
       (if_start_expr (special_block_keyword) (raw_text_expr))
-      (text)
       (element
         (self_closing_tag
           (tag_name)
@@ -116,13 +111,10 @@ Some error finding bug
           (attribute (attribute_name) (expr_attribute_value (expression (raw_text_expr))))
         )
       )
-      (text)
       (if_end_expr (special_block_keyword))
     )
-    (text)
     (end_tag (tag_name))
   )
-  (text)
   (element
     (self_closing_tag
       (tag_name)

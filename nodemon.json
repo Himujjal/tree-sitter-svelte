@@ -9,5 +9,5 @@
     "test/corpus/*.txt"
   ],
   "ext": "txt,js,c,hh,h",
-  "exec": "pnpm build && pnpm test && && node test/test.js"
+  "exec": "pnpm gen && pnpm test -t logical_blocks"
 }
