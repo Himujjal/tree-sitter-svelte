@@ -268,9 +268,9 @@ testing
   <span>bar</span>
 </Div>
 
-<Input>
+<Input.App>
   <span>bar</span>
-</Input>
+</Input.App>
 ---------------------
 (document
   (element

@@ -1,3 +1,4 @@
+/* eslint no-undef: 0 */
 /// <reference types="tree-sitter-cli/dsl" />
 
 module.exports = grammar({
@@ -106,7 +107,7 @@ module.exports = grammar({
       ),
 
     attribute_name: () => /[^<>{}"'/=\s]+/,
-    attribute_value: ($) => /[^<>{}"'/=\s]+/,
+    attribute_value: () => /[^<>{}"'/=\s]+/,
     expr_attribute_value: ($) => $.expression,
     quoted_attribute_value: ($) =>
       choice(
@@ -114,7 +115,8 @@ module.exports = grammar({
         seq('"', optional(alias(/[^"]+/, $.attribute_value)), '"')
       ),
 
-    _text: ($) => choice(alias(/[^<>{}\s]([^<>{}]*[^<>{}\s])?/, $.text), $._expression),
+    _text: ($) =>
+      choice(alias(/[^<>{}\s]([^<>{}]*[^<>{}\s])?/, $.text), $._expression),
 
     _expression: ($) =>
       choice($.expression, $.html_expr, alias("{}", $.expression)),
@@ -145,7 +147,6 @@ module.exports = grammar({
         choice($.if_end_expr, $.else_statement, $.else_if_statement)
       ),
 
-
     else_statement: ($) => seq($.else_expr, repeat($._node), $.if_end_expr),
 
     if_start_expr: ($) =>
@@ -170,7 +171,11 @@ module.exports = grammar({
     // ----------- each and await ------------
 
     each_statement: ($) =>
-      seq($.each_start_expr, repeat($._node), choice($.else_each_statement, $.each_end_expr)),
+      seq(
+        $.each_start_expr,
+        repeat($._node),
+        choice($.else_each_statement, $.each_end_expr)
+      ),
 
     each_start_expr: ($) =>
       seq(
@@ -184,7 +189,8 @@ module.exports = grammar({
         "}"
       ),
 
-    else_each_statement: $ => seq($.else_expr, repeat($._node), $.each_end_expr),
+    else_each_statement: ($) =>
+      seq($.else_expr, repeat($._node), $.each_end_expr),
 
     each_end_expr: ($) =>
       seq("{", "/", alias("each", $.special_block_keyword), "}"),
@@ -237,7 +243,6 @@ module.exports = grammar({
       ),
     await_end_expr: ($) =>
       seq("{", "/", alias("await", $.special_block_keyword), "}"),
-
 
     // ----------------- Key statement ----------------------
     key_statement: ($) =>

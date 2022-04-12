@@ -1,5 +1,4 @@
 const fs = require("fs");
-const pathlib = require("path");
 
 let file = "";
 
@@ -301,11 +300,6 @@ function generateModifiedTreeSitterDts(json, dtsText, printer) {
     .replace(/\n+$/, "");
   printer.println(text);
 }
-
-const usageText = `
-  Usage: dts-tree-sitter INPUT
-  Generates a index.d.ts file.
-`;
 
 function fileExists(file) {
   try {

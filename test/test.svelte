@@ -92,4 +92,8 @@
   {/if}
 </svelte:head>
 
+<Input.Doc>
+
+</Input.Doc>
+
 <Document {doc} {parentDoc} />

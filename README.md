@@ -8,11 +8,20 @@ Tree-sitter grammar for [svelte](https://svelte.dev)
 npm i tree-sitter-svelte tree-sitter
 ```
 
+# Dev
+
+After installation (`npm i`),
+
+```
+npm run dev
+```
+
 # Usage
 
 To get started with exploring the grammar in a web-ui. Run:
 
-NOTE: `emcc` must be installed and in your path 
+NOTE: `emcc` must be installed and in your path
+
 ```sh
 npm run ui
 ```
@@ -50,7 +59,6 @@ console.log(tree.rootNode.toString());
 //    )
 //  )
 //)
-
 ```
 
 # Languages supported:
@@ -58,7 +66,6 @@ console.log(tree.rootNode.toString());
 - [x] JavaScript/TypeScript
 - [x] Rust
 - [ ] Go
-- [x] Zig
 - [ ] Nim
 - [ ] Python
 
