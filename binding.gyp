@@ -15,7 +15,7 @@
         "-std=c99",
       ],
       "xcode_settings": {
-        "OTHER_CFLAGS": [
+        "OTHER_CCFLAGS": [
           "-std=c++14"
         ],
         'CLANG_CXX_LANGUAGE_STANDARD': 'c++14'
