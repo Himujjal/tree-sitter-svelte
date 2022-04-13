@@ -475,6 +475,10 @@
           "name": "html_expr"
         },
         {
+          "type": "SYMBOL",
+          "name": "const_expr"
+        },
+        {
           "type": "ALIAS",
           "content": {
             "type": "STRING",
@@ -518,6 +522,44 @@
           "content": {
             "type": "STRING",
             "value": "html"
+          },
+          "named": true,
+          "value": "special_block_keyword"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "raw_text_expr"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        }
+      ]
+    },
+    "const_expr": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "STRING",
+          "value": "@"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "const"
           },
           "named": true,
           "value": "special_block_keyword"

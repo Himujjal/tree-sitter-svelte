@@ -117,6 +117,10 @@
           "named": true
         },
         {
+          "type": "const_expr",
+          "named": true
+        },
+        {
           "type": "each_statement",
           "named": true
         },
@@ -203,6 +207,10 @@
           "named": true
         },
         {
+          "type": "const_expr",
+          "named": true
+        },
+        {
           "type": "each_statement",
           "named": true
         },
@@ -242,6 +250,25 @@
     }
   },
   {
+    "type": "const_expr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "raw_text_expr",
+          "named": true
+        },
+        {
+          "type": "special_block_keyword",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "document",
     "named": true,
     "fields": {},
@@ -255,6 +282,10 @@
         },
         {
           "type": "comment",
+          "named": true
+        },
+        {
+          "type": "const_expr",
           "named": true
         },
         {
@@ -355,6 +386,10 @@
           "named": true
         },
         {
+          "type": "const_expr",
+          "named": true
+        },
+        {
           "type": "each_end_expr",
           "named": true
         },
@@ -422,6 +457,10 @@
           "named": true
         },
         {
+          "type": "const_expr",
+          "named": true
+        },
+        {
           "type": "each_statement",
           "named": true
         },
@@ -486,6 +525,10 @@
         },
         {
           "type": "comment",
+          "named": true
+        },
+        {
+          "type": "const_expr",
           "named": true
         },
         {
@@ -586,6 +629,10 @@
           "named": true
         },
         {
+          "type": "const_expr",
+          "named": true
+        },
+        {
           "type": "each_statement",
           "named": true
         },
@@ -654,6 +701,10 @@
         },
         {
           "type": "comment",
+          "named": true
+        },
+        {
+          "type": "const_expr",
           "named": true
         },
         {
@@ -818,6 +869,10 @@
           "named": true
         },
         {
+          "type": "const_expr",
+          "named": true
+        },
+        {
           "type": "each_statement",
           "named": true
         },
@@ -920,6 +975,10 @@
         },
         {
           "type": "comment",
+          "named": true
+        },
+        {
+          "type": "const_expr",
           "named": true
         },
         {
@@ -1109,6 +1168,10 @@
         },
         {
           "type": "comment",
+          "named": true
+        },
+        {
+          "type": "const_expr",
           "named": true
         },
         {
