@@ -1,6 +1,6 @@
 [package]
 name = "tree-sitter-svelte"
-version = "0.10.1"
+version = "0.10.2"
 authors = ["Himujjal <himu@tuta.io>"]
 readme = "bindings/rust/README.md"
 keywords = ["incremental", "parsing", "svelte"]
