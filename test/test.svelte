@@ -93,7 +93,7 @@
 </svelte:head>
 
 <Input.Doc>
-
+  {@const a = a + 1}
 </Input.Doc>
 
 <Document {doc} {parentDoc} />

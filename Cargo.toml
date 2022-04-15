@@ -1,6 +1,6 @@
 [package]
 name = "tree-sitter-svelte"
-version = "0.9.5"
+version = "0.10.1"
 authors = ["Himujjal <himu@tuta.io>"]
 readme = "bindings/rust/README.md"
 keywords = ["incremental", "parsing", "svelte"]
@@ -22,7 +22,7 @@ include = [
 path = "bindings/rust/lib.rs"
 
 [dependencies]
-tree-sitter = "0.19.3"
+tree-sitter = "0.20.6"
 
 [build-dependencies]
 cc = "1.0"
