@@ -14,6 +14,12 @@ Tree-sitter also requires [nodemon](https://nodemon.io/) to run, so also install
 npm i -g nodemon
 ```
 
+Finally, you will need [pnpm](https://pnpm.io/installation). If you’re running Node 16.13 or later, it comes as part of Node so you can simply run the following to activate it:
+
+```
+corepack enable
+```
+
 # Dev
 
 After installation (`npm i`),
