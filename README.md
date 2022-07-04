@@ -8,6 +8,12 @@ Tree-sitter grammar for [svelte](https://svelte.dev)
 npm i tree-sitter-svelte tree-sitter
 ```
 
+Tree-sitter also requires [nodemon](https://nodemon.io/) to run, so also install that if you don’t already have it:
+
+```
+npm i -g nodemon
+```
+
 # Dev
 
 After installation (`npm i`),
