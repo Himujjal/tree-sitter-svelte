@@ -76,7 +76,7 @@ void deserialize(Scanner *scanner, const char *buffer, unsigned length) {
     vc_vector_resize(scanner->tags, tag_count, initTag(scanner->A));
     for (unsigned j = 0; j < serialized_tag_count; j++) {
       Tag *tag = vc_vector_at(scanner->tags, j);
-      tag->type = (TagType)(buffer[i++]);
+      tag->type = (TagType)(abs(buffer[i++]));
       if (tag->type == CUSTOM) {
         uint16_t name_length = (uint8_t)(buffer[i++]);
         tag->custom_tag_name =
