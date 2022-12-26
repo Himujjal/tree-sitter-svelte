@@ -255,7 +255,7 @@ bool scan_word(TSLexer *lexer, ekstring word) {
     lexer->advance(lexer, false);
     c = lexer->lookahead;
   }
-  return (c == '{' || iswspace(c));
+  return (c == '{' || iswspace(c) || c == '}');
 }
 
 bool scan_raw_text_expr(Scanner *scanner, TSLexer *lexer,
