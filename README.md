@@ -73,6 +73,10 @@ console.log(tree.rootNode.toString());
 //)
 ```
 
+# For Neovim peeps
+
+Install `:TSInstall typescript scss` for the plugin to work everywhere in Neovim (TypeScript/SCSS/LESS/PostCSS)
+
 # Languages supported:
 
 - [x] JavaScript/TypeScript

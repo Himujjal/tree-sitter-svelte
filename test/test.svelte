@@ -92,8 +92,8 @@
   {/if}
 </svelte:head>
 
-<style lang="postcss">
- div {
+<style>
+  div {
     color: #000;
   }
 </style>
