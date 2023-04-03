@@ -3,6 +3,9 @@
   "version": "0.10.1",
   "description": "Tree-sitter-grammar for svelte",
   "main": "bindings/node",
+  "engines": {
+    "node": "~18.4.0"
+  },
   "scripts": {
     "test": "tree-sitter test",
     "gen": "tree-sitter generate",
@@ -30,11 +33,11 @@
   },
   "homepage": "https://github.com/Himujjal/tree-sitter-svelte#readme",
   "dependencies": {
-    "nan": "^2.14.2"
+    "nan": "^2.17.0"
   },
   "devDependencies": {
-    "@types/node": "^14.14.22",
-    "tree-sitter-cli": "^0.20.6"
+    "@types/node": "^18.15.11",
+    "tree-sitter-cli": "^0.20.7"
   },
   "tree-sitter": [
     {

@@ -92,6 +92,13 @@
   {/if}
 </svelte:head>
 
+<style lang="postcss">
+ div {
+    color: #000;
+  }
+</style>
+
+
 <Input.Doc>
   {@const a = a + 1}
 </Input.Doc>
