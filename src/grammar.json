@@ -55,6 +55,10 @@
         {
           "type": "SYMBOL",
           "name": "await_statement"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "snippet_statement"
         }
       ]
     },
@@ -479,6 +483,10 @@
           "name": "const_expr"
         },
         {
+          "type": "SYMBOL",
+          "name": "render_expr"
+        },
+        {
           "type": "ALIAS",
           "content": {
             "type": "STRING",
@@ -573,6 +581,71 @@
             },
             {
               "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        }
+      ]
+    },
+    "render_expr": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "STRING",
+          "value": "@"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "render"
+          },
+          "named": true,
+          "value": "special_block_keyword"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "PATTERN",
+            "value": "[a-zA-Z$_][a-zA-Z0-9_]*"
+          },
+          "named": true,
+          "value": "snippet_name"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "("
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "PATTERN",
+                    "value": "[^)]+"
+                  },
+                  "named": true,
+                  "value": "raw_text_expr"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "STRING",
+              "value": ")"
             }
           ]
         },
@@ -1164,6 +1237,117 @@
           "content": {
             "type": "STRING",
             "value": "await"
+          },
+          "named": true,
+          "value": "special_block_keyword"
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        }
+      ]
+    },
+    "snippet_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "snippet_start_expr"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_node"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "snippet_end_expr"
+        }
+      ]
+    },
+    "snippet_start_expr": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "STRING",
+          "value": "#"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "snippet"
+          },
+          "named": true,
+          "value": "special_block_keyword"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "PATTERN",
+            "value": "[a-zA-Z$_][a-zA-Z0-9_]*"
+          },
+          "named": true,
+          "value": "snippet_name"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "("
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "PATTERN",
+                    "value": "[^)]+"
+                  },
+                  "named": true,
+                  "value": "raw_text_expr"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "STRING",
+              "value": ")"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        }
+      ]
+    },
+    "snippet_end_expr": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "STRING",
+          "value": "/"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "snippet"
           },
           "named": true,
           "value": "special_block_keyword"

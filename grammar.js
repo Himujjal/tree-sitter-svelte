@@ -34,7 +34,8 @@ module.exports = grammar({
         $.if_statement,
         $.key_statement,
         $.each_statement,
-        $.await_statement
+        $.await_statement,
+        $.snippet_statement
       ),
 
     element: ($) =>
@@ -123,6 +124,7 @@ module.exports = grammar({
         $.expression,
         $.html_expr,
         $.const_expr,
+        $.render_expr,
         alias("{}", $.expression)
       ),
 
@@ -144,6 +146,22 @@ module.exports = grammar({
         optional($.raw_text_expr),
         "}"
       ),
+    render_expr: ($) =>
+      seq(
+        "{",
+        "@",
+        alias("render", $.special_block_keyword),
+        alias(/[a-zA-Z$_][a-zA-Z0-9_]*/, $.snippet_name),
+        seq(
+          "(",
+          optional(
+            alias(/[^)]+/, $.raw_text_expr)
+          ),
+          ")"
+        ),
+        "}"
+      ),
+
     // ------------ if-else ------------------
 
     if_statement: ($) =>
@@ -256,6 +274,35 @@ module.exports = grammar({
       ),
     await_end_expr: ($) =>
       seq("{", "/", alias("await", $.special_block_keyword), "}"),
+
+    // --------------- Snippet statement --------------------
+
+    snippet_statement: ($) =>
+      seq(
+        $.snippet_start_expr,
+        repeat($._node),
+        // alias(repeat($._node), $.content),
+        $.snippet_end_expr
+      ),
+
+    snippet_start_expr: ($) =>
+      seq(
+        "{",
+        "#",
+        alias("snippet", $.special_block_keyword),
+        alias(/[a-zA-Z$_][a-zA-Z0-9_]*/, $.snippet_name),
+        seq(
+          "(",
+          optional(
+            alias(/[^)]+/, $.raw_text_expr)
+          ),
+          ")"
+        ),
+        "}"
+      ),
+
+    snippet_end_expr: ($) =>
+      seq("{", "/", alias("snippet", $.special_block_keyword), "}"),
 
     // ----------------- Key statement ----------------------
     key_statement: ($) =>
