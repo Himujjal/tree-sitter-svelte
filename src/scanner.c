@@ -258,31 +258,77 @@ bool scan_word(TSLexer *lexer, ekstring word) {
   return (c == '{' || iswspace(c));
 }
 
+bool scan_for_balanced_character(TSLexer *lexer, char open, char closed) {
+  int stack = 0;
+  char c = lexer->lookahead;
+  while (c) {
+    if (c == open) {
+      stack++;
+    } else if (c == closed) {
+      stack--;
+      if (stack == 0) return true;
+    } else if (c == '\n') {
+      // This can only happen if the braces are unbalanced, in which case
+      // there's utter chaos anyway.
+      return false;
+    }
+    lexer->advance(lexer, false);
+    c = lexer->lookahead;
+  }
+  return false;
+}
+
+// RAW_TEXT_EACH can include:
+// single identifier OR
+// array
+
 bool scan_raw_text_expr(Scanner *scanner, TSLexer *lexer,
                         TokenType extraToken) {
+  // Here we're scanning for either
+  //
+  // {#foo $THUD} or {#foo $BAR baz $THUD}
+  //
+  // where $BAR is something with more constraints than $THUD.
+  //
+  // Once we've given up on finding $BAR, we can eagerly proceed to $THUD.
   char c = lexer->lookahead;
-  int inner_curly_start = 0;
-
+  bool extraTokenPossible = true;
   while (c) {
     switch (c) {
     case '{': {
-      inner_curly_start++;
+      // Braces aren't valid in RAW_TEXT_EACH or RAW_TEXT_AWAIT, so we'll rule
+      // those out and keep scanning until we find the matching brace.
+      extraTokenPossible = false;
+      scan_for_balanced_character(lexer, '{', '}');
       break;
     }
     case '}': {
-      if (inner_curly_start <= 0) {
-        lexer->mark_end(lexer);
-        lexer->result_symbol = RAW_TEXT_EXPR;
-        return true;
-      }
-      inner_curly_start--;
+      // This is guaranteed to be an unbalanced brace, or else it would've been
+      // handled by `scan_for_balanced_character`. This means we're at the end
+      // of the block's opening expression.
+      lexer->mark_end(lexer);
+      lexer->result_symbol = RAW_TEXT_EXPR;
+      return true;
       break;
     }
+    case '[': {
+      // An array is valid for RAW_TEXT_EACH, but not RAW_TEXT_AWAIT.
+      extraTokenPossible = extraToken == RAW_TEXT_EACH;
+      scan_for_balanced_character(lexer, '[', ']');
+      break;
+    }
+    // We don't need a case for `]` here because balanced `]`s are handled by
+    // `scan_for_balanced_character`, and unbalanced `]`s are treated like any
+    // other random character.
     case '\n':
     case '\t':
     // case ')':
     case ' ': {
-      if (extraToken == RAW_TEXT_AWAIT || extraToken == RAW_TEXT_EACH) {
+      // This space character only holds the possibility of an `as` or `then`
+      // keyword if the input we've encountered so far hasn't already ruled out
+      // those constructs. If they have been ruled out, then there's nothing
+      // special about this space character and we should ignore it.
+      if (extraTokenPossible && (extraToken == RAW_TEXT_AWAIT || extraToken == RAW_TEXT_EACH)) {
         lexer->mark_end(lexer);
         lexer->advance(lexer, false);
         c = lexer->lookahead;
@@ -291,12 +337,16 @@ bool scan_raw_text_expr(Scanner *scanner, TSLexer *lexer,
           if (scan_word(lexer, thenWord)) {
             lexer->result_symbol = RAW_TEXT_AWAIT;
             return true;
+          } else {
+            extraTokenPossible = false;
           }
         } else if (extraToken == RAW_TEXT_EACH && c == 'a') {
           ekstring asWord = init_string_str(scanner->A, "as", 2);
           if (scan_word(lexer, asWord)) {
             lexer->result_symbol = RAW_TEXT_EACH;
             return true;
+          } else {
+            extraTokenPossible = false;
           }
         }
       }
@@ -306,6 +356,8 @@ bool scan_raw_text_expr(Scanner *scanner, TSLexer *lexer,
     case '"':
     case '\'':
     case '`': {
+      // Opening quote characters. Advance until we find a matching unescaped
+      // closing quote.
       char quote = c;
       lexer->advance(lexer, false);
       c = lexer->lookahead;
