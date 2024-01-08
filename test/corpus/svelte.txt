@@ -458,9 +458,9 @@ Snippet (in component)
         (special_block_keyword)))
     (end_tag
       (tag_name))))
-      
+
 ============================
-Render
+@render
 ============================
 <div>
   {@render figure(image)}
@@ -479,7 +479,7 @@ Render
 )
 
 ============================
-Render (without argument)
+@render (without argument)
 ============================
 <div>
   {@render figure()}
@@ -492,6 +492,23 @@ Render (without argument)
     (render_expr
       (special_block_keyword)
       (snippet_name))
+    (end_tag
+      (tag_name)))
+)
+============================
+@debug
+============================
+<div>
+  {@debug foo}
+</div>
+------------------------
+(document
+  (element
+    (start_tag
+      (tag_name))
+    (debug_expr
+      (special_block_keyword)
+      (raw_text_expr))
     (end_tag
       (tag_name)))
 )
