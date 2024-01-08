@@ -380,6 +380,38 @@
       "type": "SYMBOL",
       "name": "expression"
     },
+    "single_quoted_interpolated_attribute_value": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "expression"
+          },
+          {
+            "type": "PATTERN",
+            "value": "[^'{]+"
+          }
+        ]
+      }
+    },
+    "double_quoted_interpolated_attribute_value": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "expression"
+          },
+          {
+            "type": "PATTERN",
+            "value": "[^\"{]+"
+          }
+        ]
+      }
+    },
     "quoted_attribute_value": {
       "type": "CHOICE",
       "members": [
@@ -394,13 +426,22 @@
               "type": "CHOICE",
               "members": [
                 {
-                  "type": "ALIAS",
-                  "content": {
-                    "type": "PATTERN",
-                    "value": "[^']+"
-                  },
-                  "named": true,
-                  "value": "attribute_value"
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "attribute_value"
+                    },
+                    {
+                      "type": "ALIAS",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "single_quoted_interpolated_attribute_value"
+                      },
+                      "named": true,
+                      "value": "attribute_value"
+                    }
+                  ]
                 },
                 {
                   "type": "BLANK"
@@ -424,13 +465,22 @@
               "type": "CHOICE",
               "members": [
                 {
-                  "type": "ALIAS",
-                  "content": {
-                    "type": "PATTERN",
-                    "value": "[^\"]+"
-                  },
-                  "named": true,
-                  "value": "attribute_value"
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "attribute_value"
+                    },
+                    {
+                      "type": "ALIAS",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "double_quoted_interpolated_attribute_value"
+                      },
+                      "named": true,
+                      "value": "attribute_value"
+                    }
+                  ]
                 },
                 {
                   "type": "BLANK"

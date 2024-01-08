@@ -109,11 +109,48 @@ module.exports = grammar({
     attribute_name: () => /[^<>{}"'/=\s]+/,
     attribute_value: () => /[^<>{}"'/=\s]+/,
     expr_attribute_value: ($) => $.expression,
+
+    // An attribute value that's a mix of bare strings and expressions.
+    single_quoted_interpolated_attribute_value: ($) =>
+      repeat1(
+        choice(
+          $.expression,
+          /[^'{]+/,
+        )
+      ),
+
+    double_quoted_interpolated_attribute_value: ($) =>
+      repeat1(
+        choice(
+          $.expression,
+          /[^"{]+/,
+        )
+      ),
+
     quoted_attribute_value: ($) =>
       choice(
-        seq("'", optional(alias(/[^']+/, $.attribute_value)), "'"),
-        seq('"', optional(alias(/[^"]+/, $.attribute_value)), '"')
-      ),
+        seq(
+          "'",
+          optional(
+            choice(
+              $.attribute_value,
+              alias($.single_quoted_interpolated_attribute_value, $.attribute_value)
+            )
+          ),
+          "'"
+        ),
+
+        seq(
+          '"',
+          optional(
+            choice(
+              $.attribute_value,
+              alias($.double_quoted_interpolated_attribute_value, $.attribute_value)
+            )
+          ),
+          '"'
+        ),
+      ),    
 
     _text: ($) =>
       choice(alias(/[^<>{}\s]([^<>{}]*[^<>{}\s])?/, $.text), $._expression),
