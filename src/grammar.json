@@ -487,6 +487,10 @@
           "name": "render_expr"
         },
         {
+          "type": "SYMBOL",
+          "name": "debug_expr"
+        },
+        {
           "type": "ALIAS",
           "content": {
             "type": "STRING",
@@ -648,6 +652,36 @@
               "value": ")"
             }
           ]
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        }
+      ]
+    },
+    "debug_expr": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "STRING",
+          "value": "@"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "debug"
+          },
+          "named": true,
+          "value": "special_block_keyword"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "raw_text_expr"
         },
         {
           "type": "STRING",

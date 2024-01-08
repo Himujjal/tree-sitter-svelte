@@ -125,6 +125,7 @@ module.exports = grammar({
         $.html_expr,
         $.const_expr,
         $.render_expr,
+        $.debug_expr,
         alias("{}", $.expression)
       ),
 
@@ -159,6 +160,14 @@ module.exports = grammar({
           ),
           ")"
         ),
+        "}"
+      ),
+    debug_expr: ($) =>
+      seq(
+        "{",
+        "@",
+        alias("debug", $.special_block_keyword),
+        $.raw_text_expr,
         "}"
       ),
 

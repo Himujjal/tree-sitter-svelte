@@ -419,6 +419,47 @@ Snippet (with nesting)
 )
 
 ============================
+Snippet (in component)
+============================
+<script>
+	import Button from './Button.svelte';
+</script>
+
+<Button onclick={() => alert('Clicked the button')}>
+	{#snippet children(prop)}
+		click {prop}
+	{/snippet}
+</Button>
+------------------------
+(document
+  (script_element
+    (start_tag
+      (tag_name))
+    (raw_text)
+    (end_tag
+      (tag_name)))
+  (element
+    (start_tag
+      (tag_name)
+      (attribute
+        (attribute_name)
+        (expr_attribute_value
+          (expression
+            (raw_text_expr)))))
+    (snippet_statement
+      (snippet_start_expr
+        (special_block_keyword)
+        (snippet_name)
+        (raw_text_expr))
+      (text)
+      (expression
+        (raw_text_expr))
+      (snippet_end_expr
+        (special_block_keyword)))
+    (end_tag
+      (tag_name))))
+      
+============================
 Render
 ============================
 <div>
