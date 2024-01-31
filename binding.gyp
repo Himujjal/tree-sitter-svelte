@@ -19,6 +19,13 @@
           "-std=c++14"
         ],
         'CLANG_CXX_LANGUAGE_STANDARD': 'c++14'
+      },
+      "msvs_settings": {
+        "VCCLCompilerTool": {
+          "AdditionalOptions": [
+            '-utf-8'
+          ],
+        },
       }
     }
   ],
