@@ -395,12 +395,17 @@ bool scan(Scanner *scanner, TSLexer *lexer, const bool *valid_symbols) {
   return false;
 }
 
+#ifndef _MSC_VER
 #pragma GCC diagnostic push
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
+#endif
 void deleter(void *tag, za_Allocator *A) {}
+#ifndef _MSC_VER
 #pragma GCC diagnostic pop
 #pragma clang diagnostic pop
+#endif
+
 void *tree_sitter_svelte_external_scanner_create() {
   za_Allocator *A = za_New();
   Scanner *scanner = (Scanner *)za_Alloc(A, sizeof(Scanner));
