@@ -135,6 +135,11 @@ await
 {/await}
 {#await yo thenvalue}
 {/await}
+{#await loading}
+{:then}
+{/await}
+{#await loading then}
+{/await}
 ------
 (document
     (await_statement
@@ -152,6 +157,17 @@ await
     )
     (await_statement
         (await_start_expr (special_block_keyword) (raw_text_expr))
+        (await_end_expr (special_block_keyword))
+    )
+    (await_statement
+		(await_start_expr (special_block_keyword) (raw_text_expr))
+        (then_statement
+			(then_expr (special_block_keyword) (raw_text_expr))
+			(await_end_expr (special_block_keyword))
+		)
+	)
+    (await_statement
+        (await_start_expr (special_block_keyword) (raw_text_await) (then) (raw_text_expr))
         (await_end_expr (special_block_keyword))
     )
 )
