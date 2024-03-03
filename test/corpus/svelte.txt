@@ -122,6 +122,41 @@ logical_blocks
     (expression (raw_text_expr))
 )
 
+==========================
+each (with unusual values)
+==========================
+{#each "abcd" as letter}
+  {letter}
+{/each}
+
+{#each ["a", "b"] as elem}
+  {elem}
+{/each}
+
+{#each [["a", "b"], ["c", "d"]] as pair}
+  {#each pair as letter}{letter}{/each}
+{/each}
+
+-------
+(document
+  (each_statement
+    (each_start_expr (special_block_keyword) (raw_text_each) (as) (raw_text_expr))
+    (expression (raw_text_expr))
+    (each_end_expr (special_block_keyword)))
+  (each_statement
+    (each_start_expr (special_block_keyword) (raw_text_each) (as) (raw_text_expr))
+    (expression (raw_text_expr))
+    (each_end_expr (special_block_keyword)))
+  (each_statement
+    (each_start_expr (special_block_keyword) (raw_text_each) (as) (raw_text_expr))
+    (each_statement
+      (each_start_expr (special_block_keyword) (raw_text_each) (as) (raw_text_expr))
+      (expression (raw_text_expr))
+      (each_end_expr (special_block_keyword)))
+    (each_end_expr (special_block_keyword))
+  )
+)
+
 =======================
 await
 ========================
