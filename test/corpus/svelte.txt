@@ -61,7 +61,7 @@ logical_blocks
 {#each cats as cat (hello)}
   <div>Hello</div>
 {:else}
-  <li>Hello</li>  
+  <li>Hello</li>
 {/each}
 
 {#each user.codes.filter(codeNotBlocked) as someItem (someItem.id)}
@@ -290,7 +290,7 @@ Dot Tags
     (element
       (start_tag (tag_name))
       (text)
-      (end_tag (tag_name)) 
+      (end_tag (tag_name))
     )
     (end_tag (tag_name))
   )
@@ -304,4 +304,227 @@ Const Tags
 ------------------------
 (document
   (const_expr (special_block_keyword) (raw_text_expr))
+)
+
+========================
+Snippet (empty)
+========================
+{#snippet figure(image)}
+{/snippet}
+------------------------
+(document
+  (snippet_statement
+    (snippet_start_expr
+      (special_block_keyword)
+      (snippet_name)
+      (raw_text_expr)
+    )
+    (snippet_end_expr
+      (special_block_keyword)
+    )
+  )
+)
+
+========================
+Snippet
+========================
+{#snippet figure(image)}
+	<figure></figure>
+{/snippet}
+------------------------
+(document
+  (snippet_statement
+    (snippet_start_expr
+      (special_block_keyword)
+      (snippet_name)
+      (raw_text_expr))
+    (element
+     (start_tag
+       (tag_name))
+     (end_tag
+       (tag_name)))
+   (snippet_end_expr
+     (special_block_keyword)))
+)
+
+===========================
+Snippet (without argument)
+===========================
+{#snippet figure()}
+	<figure></figure>
+{/snippet}
+------------------------
+(document
+  (snippet_statement
+    (snippet_start_expr
+      (special_block_keyword)
+      (snippet_name))
+    (element
+     (start_tag
+       (tag_name))
+     (end_tag
+       (tag_name)))
+   (snippet_end_expr
+     (special_block_keyword)))
+)
+
+============================
+Snippet (with destructuring)
+============================
+{#snippet figure({ src, caption, width, height })}
+	<figure></figure>
+{/snippet}
+------------------------
+(document
+  (snippet_statement
+    (snippet_start_expr
+      (special_block_keyword)
+      (snippet_name)
+      (raw_text_expr))
+    (element
+     (start_tag
+       (tag_name))
+     (end_tag
+       (tag_name)))
+   (snippet_end_expr
+     (special_block_keyword)))
+)
+
+============================
+Snippet (with nesting)
+============================
+<div>
+	{#snippet x()}
+		{#snippet y()}
+    {/snippet}
+
+		<!-- this is fine -->
+		{@render y()}
+	{/snippet}
+
+	<!-- this will error, as `y` is not in scope -->
+	{@render y()}
+</div>
+------------------------
+(document
+  (element
+    (start_tag
+      (tag_name))
+    (snippet_statement
+      (snippet_start_expr
+        (special_block_keyword)
+        (snippet_name))
+      (snippet_statement
+        (snippet_start_expr
+          (special_block_keyword)
+          (snippet_name))
+        (snippet_end_expr
+          (special_block_keyword)))
+      (comment)
+      (render_expr
+        (special_block_keyword)
+        (snippet_name))
+      (snippet_end_expr
+        (special_block_keyword)))
+    (comment)
+    (render_expr
+      (special_block_keyword)
+      (snippet_name))
+    (end_tag
+      (tag_name)))
+)
+
+============================
+Snippet (in component)
+============================
+<script>
+	import Button from './Button.svelte';
+</script>
+
+<Button onclick={() => alert('Clicked the button')}>
+	{#snippet children(prop)}
+		click {prop}
+	{/snippet}
+</Button>
+------------------------
+(document
+  (script_element
+    (start_tag
+      (tag_name))
+    (raw_text)
+    (end_tag
+      (tag_name)))
+  (element
+    (start_tag
+      (tag_name)
+      (attribute
+        (attribute_name)
+        (expr_attribute_value
+          (expression
+            (raw_text_expr)))))
+    (snippet_statement
+      (snippet_start_expr
+        (special_block_keyword)
+        (snippet_name)
+        (raw_text_expr))
+      (text)
+      (expression
+        (raw_text_expr))
+      (snippet_end_expr
+        (special_block_keyword)))
+    (end_tag
+      (tag_name))))
+
+============================
+@render
+============================
+<div>
+  {@render figure(image)}
+</div>
+------------------------
+(document
+  (element
+    (start_tag
+      (tag_name))
+    (render_expr
+      (special_block_keyword)
+      (snippet_name)
+      (raw_text_expr))
+    (end_tag
+      (tag_name)))
+)
+
+============================
+@render (without argument)
+============================
+<div>
+  {@render figure()}
+</div>
+------------------------
+(document
+  (element
+    (start_tag
+      (tag_name))
+    (render_expr
+      (special_block_keyword)
+      (snippet_name))
+    (end_tag
+      (tag_name)))
+)
+============================
+@debug
+============================
+<div>
+  {@debug foo}
+</div>
+------------------------
+(document
+  (element
+    (start_tag
+      (tag_name))
+    (debug_expr
+      (special_block_keyword)
+      (raw_text_expr))
+    (end_tag
+      (tag_name)))
 )
