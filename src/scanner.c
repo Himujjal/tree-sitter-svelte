@@ -267,10 +267,6 @@ bool scan_for_balanced_character(TSLexer *lexer, char open, char closed) {
     } else if (c == closed) {
       stack--;
       if (stack == 0) return true;
-    } else if (c == '\n') {
-      // This can only happen if the braces are unbalanced, in which case
-      // there's utter chaos anyway.
-      return false;
     }
     lexer->advance(lexer, false);
     c = lexer->lookahead;
